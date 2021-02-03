@@ -1,4 +1,8 @@
 Powerg Dev:
    sql:
       -user: 
-          create table user(user_id bigint auto_increment primary key, user_name 			varchar(30), user_password varchar(1024), role varchar(10), created_at datetime);
+          create table user(user_id bigint auto_increment primary key, 
+          			user_name varchar(30), 
+          			user_password varchar(1024), 
+          			role varchar(10), 
+          			created_at datetime);
