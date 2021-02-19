@@ -20,11 +20,11 @@ const dbService = require('./database/dbService');
 // };
 
 // generateQR('etalket.com');
-
+app.use(cors());
 app.use(express.json());
 app.use('/api/user', authRoute);
 app.use('/package', Package);
-app.use(cors());
+
 
 app.listen(3000, () => {
     console.log('Server up and Running');
