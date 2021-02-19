@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const mysql = require('mysql2');
 const QRCode = require('qrcode');
+const cors = require('cors');
 
 
 const authRoute = require('./routes/auth');
