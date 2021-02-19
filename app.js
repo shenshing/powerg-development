@@ -23,7 +23,7 @@ const dbService = require('./database/dbService');
 app.use(express.json());
 app.use('/api/user', authRoute);
 app.use('/package', Package);
-
+app.use(cors());
 
 app.listen(3000, () => {
     console.log('Server up and Running');
