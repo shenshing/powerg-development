@@ -95,5 +95,4 @@ router.post('/getuser', async(req, res) => {
     })
 })
 
-
 module.exports = router;

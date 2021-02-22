@@ -8,6 +8,7 @@ const cors = require('cors');
 const authRoute = require('./routes/auth');
 const Package = require('./data/package');
 const dbService = require('./database/dbService');
+const server = require('./routes/server');
 
 // const generateQR = async text => {
 //     try {
@@ -22,6 +23,7 @@ const dbService = require('./database/dbService');
 // generateQR('etalket.com');
 app.use(cors());
 app.use(express.json());
+app.use('/', server);
 app.use('/api/user', authRoute);
 app.use('/package', Package);
 
