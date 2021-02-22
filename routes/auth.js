@@ -65,7 +65,7 @@ router.post('/login', async(req, res) => {
                     if(!validPass) return res.status(404).json({
                         message: 'invalid user name or password'
                     });
-                    const token = jwt.sign({id: user[0].user_id}, process.env.TOKEN_SECRET);
+                    const token = jwt.sign({id: user[0].user_id, role: user[0].role}, process.env.TOKEN_SECRET);
                     res.header('auth-token', token).send(token);
                 } else {
                     res.status(404).json({
@@ -77,6 +77,23 @@ router.post('/login', async(req, res) => {
         });
 
 });
+
+router.post('/getuser', async(req, res) => {
+    const { name } = req.body;
+
+    const query = ('SELECT * FROM user WHERE user_name=?;');
+    connection.query(query, [name], (err, user) => {
+        if (err) {
+            res.status(404).json({
+                message: 'Something went wrong in our End'
+            })
+        } else {
+            res.status(200).json({
+                data: user[0]
+            })
+        }
+    })
+})
 
 
 module.exports = router;
