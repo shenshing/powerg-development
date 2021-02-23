@@ -1,5 +1,9 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
+const url = require('url');
+
+
+
 const connection = require('../database/dbService');
 const { registerValidation, loginValidation } = require('./validation'); 
 const jwt = require('jsonwebtoken');
@@ -78,11 +82,10 @@ router.post('/login', async(req, res) => {
 
 });
 
-router.post('/getuser', async(req, res) => {
-    const { name } = req.body;
-
-    const query = ('SELECT * FROM user WHERE user_name=?;');
-    connection.query(query, [name], (err, user) => {
+router.get('/getuserbyid/:id', async(req, res) => {
+    const id = req.params.id;
+    const query = ('SELECT * FROM user WHERE user_id=?;');
+    connection.query(query, [id], (err, user) => {
         if (err) {
             res.status(404).json({
                 message: 'Something went wrong in our End'
@@ -92,7 +95,51 @@ router.post('/getuser', async(req, res) => {
                 data: user[0]
             })
         }
-    })
-})
+    });
+});
+
+router.get('/getallusers', async(req, res) => {
+    const query = ('SELECT * FROM user;');
+    connection.query(query, (err, users) => {
+        if (err) {
+            res.status(404).json({
+                message: 'Something went wrong in our End',
+            })
+        } else {
+            if (users.length == 0) {
+                res.status(500).json({
+                    message: 'Database is empty',
+                })
+            } else {
+                res.status(200).json({
+                    data: users
+                })
+            }
+        }
+    });
+});
+
+router.delete('/deleteuserbyid/:id', async(req, res) => {
+    const id = req.params.id;
+    // console.log(id);
+    const query = ('DELETE FROM user where user_id=?;');
+    connection.query(query, [id], (err, result) => {
+        // console.log(result);
+        if (err) {
+            res.status(500).json({
+                message: err.message,
+            })
+        } else {
+            res.status(200).json({
+                message: 'delete user successful'
+            })
+        }
+    });
+});
+
+
+
+
+
 
 module.exports = router;
