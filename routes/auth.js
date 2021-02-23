@@ -84,7 +84,7 @@ router.post('/login', async(req, res) => {
 
 router.get('/getuserbyid/:id', async(req, res) => {
     const id = req.params.id;
-    const query = ('SELECT * FROM user WHERE user_id=?;');
+    const query = ("SELECT * FROM user WHERE user_id=?;");
     connection.query(query, [id], (err, user) => {
         if (err) {
             res.status(404).json({
@@ -99,7 +99,7 @@ router.get('/getuserbyid/:id', async(req, res) => {
 });
 
 router.get('/getallusers', async(req, res) => {
-    const query = ('SELECT * FROM user;');
+    const query = ("SELECT * FROM user WHERE role='user';");
     connection.query(query, (err, users) => {
         if (err) {
             res.status(404).json({
