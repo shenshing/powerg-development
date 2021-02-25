@@ -10,8 +10,15 @@ const jwt = require('jsonwebtoken');
 
 router.post('/register', async(req, res) => {
     const { error } = registerValidation(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-    const { name, password } = req.body;
+    // if (error) return res.status(400).send(error.details[0].message);
+    if (error) {
+        console.log("ERROR: " + error.message);
+        return res.status(400).json({
+            message: error.details[0].message
+        })
+    }
+    const { name, password, contact } = req.body;
+    // console.log(name + " " + password + " " + contact);
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
                         
@@ -21,6 +28,7 @@ router.post('/register', async(req, res) => {
         const query = ('SELECT user_name FROM user WHERE user_name=?;');
         connection.query(query, [name], (err, result) => {
             if (err) {
+                console.log(err.message);
                 res.status(404).json({
                     message: 'Something went wrong in our End'
                 })
@@ -31,9 +39,10 @@ router.post('/register', async(req, res) => {
                     })
                 } else {
                     // console.log('email not exist');
-                    const query = "INSERT INTO user (user_name, user_password, role, created_at) VALUES (?, ?, ?, ?);";
-                    connection.query(query, [name, hashedPassword, user_role, dateAdded], (err, result) => {
+                    const query = "INSERT INTO user (user_name, user_password, contact, role, created_at) VALUES (?, ?, ?, ?, ?);";
+                    connection.query(query, [name, hashedPassword, contact, user_role, dateAdded], (err, result) => {
                         if (err) {
+                            console.log(err.message);
                             res.status(404).json({
                                 message: 'Something went wrong in our End'
                             })
@@ -60,6 +69,7 @@ router.post('/login', async(req, res) => {
     const query = ('SELECT * FROM user WHERE user_name=?;');
     connection.query(query, [name], async(err, user) => {
             if (err) {
+                console.log("ERROR: " + err.message);
                 res.status(404).json({
                     message: 'Something went wrong in our End'
                 })
@@ -87,6 +97,7 @@ router.get('/getuserbyid/:id', async(req, res) => {
     const query = ("SELECT * FROM user WHERE user_id=?;");
     connection.query(query, [id], (err, user) => {
         if (err) {
+            console.log("ERROR: " + err.message);
             res.status(404).json({
                 message: 'Something went wrong in our End'
             })
@@ -102,6 +113,7 @@ router.get('/getallusers', async(req, res) => {
     const query = ("SELECT * FROM user WHERE role='user';");
     connection.query(query, (err, users) => {
         if (err) {
+            console.log("ERROR: " + err.message);
             res.status(404).json({
                 message: 'Something went wrong in our End',
             })
@@ -122,14 +134,21 @@ router.get('/getallusers', async(req, res) => {
 router.delete('/deleteuserbyid/:id', async(req, res) => {
     const id = req.params.id;
     // console.log(id);
-    const query = ('DELETE FROM user where user_id=?;');
+    const query = ("DELETE FROM user where user_id=? AND role='user';");
     connection.query(query, [id], (err, result) => {
         // console.log(result);
         if (err) {
+            console.log("ERROR: " + err.message);
             res.status(500).json({
                 message: err.message,
             })
         } else {
+            // console.log(result);
+            if (result.affectedRows == 0) {
+                return res.status(500).json({
+                    message: 'unable to delete this user'
+                })
+            }
             res.status(200).json({
                 message: 'delete user successful'
             })
@@ -137,6 +156,31 @@ router.delete('/deleteuserbyid/:id', async(req, res) => {
     });
 });
 
+router.put('/updateinfo/:id', async(req, res) => {
+    const id = req.params.id;
+    const { name, password, contact } = req.body;
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const query = ("UPDATE user SET user_name=?, user_password=?, contact=? WHERE user_id=?;");
+    connection.query(query, [name, hashedPassword, contact, id], (err, result) => {
+        if (err) {
+            console.log("ERROR: " + err.message);
+            res.status(500).json({
+                message: err.message,
+            })
+        } else {
+            if (result.affectedRows == 0) {
+                return res.status(500).json({
+                    message: 'unable to update user'
+                })
+            }
+            res.status(200).json({
+                message: 'update user successful'
+            })
+        }
+    })
+});
 
 
 
