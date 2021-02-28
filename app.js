@@ -10,6 +10,12 @@ const Package = require('./data/package');
 const dbService = require('./database/dbService');
 const server = require('./routes/server');
 
+// const {isAdmin} = require('./routes/validation');
+
+// const data = isAdmin('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwicm9sZSI6InVzZXIiLCJpYXQiOjE2MTQyNDcyNzF9.ZZWrZS5pSp41IYqJ8jSqF22nv9DULm0HO5DzpQ5MYxU');
+// const data = isAdmin('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mywicm9sZSI6ImFkbWluIiwiaWF0IjoxNjE0MjQ4ODE5fQ.1BRlh0YoEhJdBBsBmth4ur0RMQo3K6BBT_nfTnjHD0c');
+// console.log(data);
+
 // const generateQR = async text => {
 //     try {
 //         // let result = await QRCode.toFile('../images/qr.png', text);  

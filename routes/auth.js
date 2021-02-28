@@ -2,10 +2,13 @@ const router = require('express').Router();
 const bcrypt = require('bcryptjs');
 const url = require('url');
 
-
-
 const connection = require('../database/dbService');
-const { registerValidation, loginValidation } = require('./validation'); 
+const { 
+    registerValidation, 
+    loginValidation,
+    authRole 
+} = require('./validation'); 
+
 const jwt = require('jsonwebtoken');
 
 router.post('/register', async(req, res) => {
@@ -77,13 +80,20 @@ router.post('/login', async(req, res) => {
                 if(user.length > 0) {
                     const validPass =  await bcrypt.compare(password, user[0].user_password);
                     if(!validPass) return res.status(404).json({
-                        message: 'invalid user name or password'
+                        message: 'invalid user name or password',
+                        auth: false
                     });
-                    const token = jwt.sign({id: user[0].user_id, role: user[0].role}, process.env.TOKEN_SECRET);
-                    res.header('auth-token', token).send(token);
+                    const signed_token = jwt.sign({id: user[0].user_id, role: user[0].role, auth: true}, process.env.TOKEN_SECRET);
+                    // res.header('auth-token', token).send(token);
+                    res.status(200).json({
+                        token: signed_token,
+                        auth: true
+
+                    })
                 } else {
                     res.status(404).json({
-                        message: 'invalid user name or password'
+                        message: 'invalid user name or password',
+                        auth: false
                     })
                 }
                 // console.log(user);
@@ -109,6 +119,7 @@ router.get('/getuserbyid/:id', async(req, res) => {
     });
 });
 
+// router.get('/getallusers', authRole('admin'), async(req, res) => {
 router.get('/getallusers', async(req, res) => {
     const query = ("SELECT * FROM user WHERE role='user';");
     connection.query(query, (err, users) => {
@@ -116,11 +127,12 @@ router.get('/getallusers', async(req, res) => {
             console.log("ERROR: " + err.message);
             res.status(404).json({
                 message: 'Something went wrong in our End',
+                err_message: err.message
             })
         } else {
             if (users.length == 0) {
                 res.status(500).json({
-                    message: 'Database is empty',
+                    message: 'No user exist in databases',
                 })
             } else {
                 res.status(200).json({
@@ -131,6 +143,7 @@ router.get('/getallusers', async(req, res) => {
     });
 });
 
+// router.delete('/deleteuserbyid/:id', authRole('admin'), async(req, res) => {
 router.delete('/deleteuserbyid/:id', async(req, res) => {
     const id = req.params.id;
     // console.log(id);
@@ -156,6 +169,7 @@ router.delete('/deleteuserbyid/:id', async(req, res) => {
     });
 });
 
+// router.put('/updateinfo/:id', authRole('admin'), async(req, res) => {
 router.put('/updateinfo/:id', async(req, res) => {
     const id = req.params.id;
     const { name, password, contact } = req.body;
