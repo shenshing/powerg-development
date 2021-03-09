@@ -18,8 +18,13 @@ router.post('/addPackage', async(req, res) => {
             } else {
                 const qr_id = 'QR' + result.insertId + '.png';
                 const qr_path = './images/' + qr_id;
+                const total_price = pro_price + service_fee;
                 // console.log(qr_path);
-                const qr_url = `https://etalket.com/?shop_owner=${shop_owner}&price=${pro_price}`;
+                const qr_url = `https://etalket.com/?package_id=${result.insertId}&cust_name=${cust_name}&location=${cust_location}&phone_number=${cust_phone}&shop_owner=${shop_owner}&service_fee=${service_fee}&price=${pro_price}&total=${total_price}`;
+
+
+
+
                 await QRCode.toFile(qr_path, qr_url);
                 // res.status(200).json({
                 //     message: "Successful add package",

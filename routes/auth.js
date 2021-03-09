@@ -87,8 +87,8 @@ router.post('/login', async(req, res) => {
                     // res.header('auth-token', token).send(token);
                     res.status(200).json({
                         token: signed_token,
-                        auth: true
-
+                        auth: true,
+                        role: user[0].role
                     })
                 } else {
                     res.status(404).json({
@@ -176,24 +176,42 @@ router.put('/updateinfo/:id', async(req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const query = ("UPDATE user SET user_name=?, user_password=?, contact=? WHERE user_id=?;");
-    connection.query(query, [name, hashedPassword, contact, id], (err, result) => {
+    const a_query = ("SELECT * FROM user WHERE user_name=?;");
+    connection.query(a_query, [name], (err, result) => {
         if (err) {
             console.log("ERROR: " + err.message);
             res.status(500).json({
                 message: err.message,
-            })
+            });
         } else {
-            if (result.affectedRows == 0) {
-                return res.status(500).json({
-                    message: 'unable to update user'
-                })
+            if (result.length > 0) {
+                return res.status(409).json({
+                    message: 'duplicate user name',
+                });
+            } else {
+                const query = ("UPDATE user SET user_name=?, user_password=?, contact=? WHERE user_id=?;");
+                connection.query(query, [name, hashedPassword, contact, id], (err, result) => {
+                    if (err) {
+                        console.log("ERROR: " + err.message);
+                        res.status(500).json({
+                            message: err.message,
+                        });
+                    } else {
+                        if (result.affectedRows == 0) {
+                            return res.status(500).json({
+                                message: 'unable to update user'
+                            })
+                        }
+                        res.status(200).json({
+                            message: 'update user successful'
+                        });
+                    }
+                });
             }
-            res.status(200).json({
-                message: 'update user successful'
-            })
         }
-    })
+    });
+
+    
 });
 
 
