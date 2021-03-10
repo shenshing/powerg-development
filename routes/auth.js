@@ -88,7 +88,8 @@ router.post('/login', async(req, res) => {
                     res.status(200).json({
                         token: signed_token,
                         auth: true,
-                        role: user[0].role
+                        role: user[0].role,
+                        user_log_id: user[0].user_id
                     })
                 } else {
                     res.status(404).json({
