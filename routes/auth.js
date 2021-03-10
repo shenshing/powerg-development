@@ -119,8 +119,8 @@ router.get('/getuserbyid/:id', async(req, res) => {
     });
 });
 
-// router.get('/getallusers', authRole('admin'), async(req, res) => {
-router.get('/getallusers', async(req, res) => {
+router.get('/getallusers', authRole('admin'), async(req, res) => {
+// router.get('/getallusers', async(req, res) => {
     const query = ("SELECT * FROM user WHERE role='user';");
     connection.query(query, (err, users) => {
         if (err) {
@@ -143,8 +143,8 @@ router.get('/getallusers', async(req, res) => {
     });
 });
 
-// router.delete('/deleteuserbyid/:id', authRole('admin'), async(req, res) => {
-router.delete('/deleteuserbyid/:id', async(req, res) => {
+router.delete('/deleteuserbyid/:id', authRole('admin'), async(req, res) => {
+// router.delete('/deleteuserbyid/:id', async(req, res) => {
     const id = req.params.id;
     // console.log(id);
     const query = ("DELETE FROM user where user_id=? AND role='user';");
@@ -169,8 +169,8 @@ router.delete('/deleteuserbyid/:id', async(req, res) => {
     });
 });
 
-// router.put('/updateinfo/:id', authRole('admin'), async(req, res) => {
-router.put('/updateinfo/:id', async(req, res) => {
+router.put('/updateinfo/:id', authRole('admin'), async(req, res) => {
+// router.put('/updateinfo/:id', async(req, res) => {
     const id = req.params.id;
     const { name, password, contact } = req.body;
     const salt = await bcrypt.genSalt(10);
