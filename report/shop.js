@@ -28,10 +28,11 @@ router.get('/generateReport', (req, res) => {
     // const end = '2021-03-11';
 
     const start = req.header('start-date');
-    const end = req.header('end-date');
+    // const end = req.header('end-date');
+    const shop = req.header('shop');
 
-    const query = "SELECT * FROM package WHERE created_at = ?;";
-    connection.query(query, [start, end], (err, packages) => {
+    const query = "SELECT * FROM package WHERE created_at = ? AND shop_owner = ?;";
+    connection.query(query, [start, shop], (err, packages) => {
         // if (err) console.log('ERROR: ' + err.message);
         if (err) {
             return res.status(404).json({
