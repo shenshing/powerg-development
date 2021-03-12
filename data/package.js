@@ -4,7 +4,11 @@ const QRCode = require('qrcode');
 const router = require('express').Router();
 
 router.post('/addPackage', async (req, res) => {
-    const dateAdded = new Date();
+    const date = new Date();
+    const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+    // const dateAdded = date.getUTCDate() + (date.getUTCMonth() + 1) + date.getUTCFullYear();
+    // const dateAdded = mo
+    console.log(dateAdded);
     const status = 'UNSUCCESS';
     const { shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by } = req.body;
     try {

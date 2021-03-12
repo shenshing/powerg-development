@@ -30,7 +30,7 @@ router.get('/generateReport', (req, res) => {
     const start = req.header('start-date');
     const end = req.header('end-date');
 
-    const query = "SELECT * FROM package WHERE created_at BETWEEN ? AND ?;";
+    const query = "SELECT * FROM package WHERE created_at = ?;";
     connection.query(query, [start, end], (err, packages) => {
         // if (err) console.log('ERROR: ' + err.message);
         if (err) {
