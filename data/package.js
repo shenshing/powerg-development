@@ -9,7 +9,7 @@ router.post('/addPackage', async (req, res) => {
     // const dateAdded = date.getUTCDate() + (date.getUTCMonth() + 1) + date.getUTCFullYear();
     // const dateAdded = mo
     console.log(dateAdded);
-    const status = 'UNSUCCESS';
+    const status = 'PENDING';
     const { shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by } = req.body;
     try {
         const query = "INSERT INTO package(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
