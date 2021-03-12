@@ -9,6 +9,7 @@ const authRoute = require('./routes/auth');
 const Package = require('./data/package');
 const dbService = require('./database/dbService');
 const server = require('./routes/server');
+const shopReport = require('./report/shop');
 
 // const {isAdmin} = require('./routes/validation');
 
@@ -32,6 +33,7 @@ app.use(express.json());
 app.use('/', server);
 app.use('/api/user', authRoute);
 app.use('/package', Package);
+app.use('/shopReport', shopReport);
 
 
 app.listen(3000, () => {

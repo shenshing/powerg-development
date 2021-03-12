@@ -3,12 +3,13 @@ const path = require('path');
 const QRCode = require('qrcode');
 const router = require('express').Router();
 
-router.post('/addPackage', async(req, res) => {
+router.post('/addPackage', async (req, res) => {
     const dateAdded = new Date();
+    const status = 'UNSUCCESS';
     const { shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by } = req.body;
     try {
-        const query =  "INSERT INTO package(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        connection.query(query, [shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, dateAdded], async(err, result) => {
+        const query = "INSERT INTO package(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        connection.query(query, [shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, status, dateAdded], async (err, result) => {
             // console.log(result);
             if (err) {
                 console.log(err);
@@ -41,10 +42,10 @@ router.post('/addPackage', async(req, res) => {
 });
 
 
-router.get('/getAllPackage', async(req, res) => {
+router.get('/getAllPackage', async (req, res) => {
     try {
         const query = "SELECT * FROM package;";
-        connection.query(query, async(err, result) => {
+        connection.query(query, async (err, result) => {
             if (err) {
                 console.log(err);
                 res.status(404).json({
