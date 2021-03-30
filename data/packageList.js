@@ -109,32 +109,29 @@ router.get('/getListById/:listId/:user', async(req, res) => {
     const delivery_man_id = parseInt(req.params.user);
     const query = "SELECT * FROM PackageList WHERE listId = ? AND deliveryManId = ?;";
     connection.query(query, [id, delivery_man_id], (err, result) => {
-        var array = [];
+        // var array = [];
         if(err) {
             console.log(err);
             return res.status(404).json({
                 message: err.message
             })
         } else {
-            const ids = result[0].packages.split(',');
-            ids.forEach((id) => {
-                const query = "SELECT * FROM package WHERE package_id = ?;";
-                connection.query(query, id, (err, result) => {
+            const idData = result[0].packages.split(',');
+                const query = "SELECT * FROM package WHERE package_id in (?)";
+                connection.query(query, [idData], (err, result) => {
                     if(err) {
                         console.log("ERROR: " + err.message);
                         res.status(404).json({
                             message: err.message,
                         });
+                    } else {
+                        return res.status(200).json({
+                            data: result
+                        })
                     }
                 })
-                array.push(result[0]);
-            });
         }
-        return res.status(200).json({
-            data: array
-        })
     })
     
 })
-    
 module.exports = router;
