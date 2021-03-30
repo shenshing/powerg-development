@@ -2,3 +2,51 @@ Powerg Dev:
    sql:
       -user: 
           CREATE TABLE user(user_id bigint auto_increment primary key, user_name varchar(30), user_password varchar(1024), contact varchar(20), role varchar(10), created_at datetime);
+
+
+      -PackageList
+          create table PackageList(id bigint auto_increment primary key, listId bigint NOT NULL, packages varchar(255),total double NOT NULL, deliveryManId bigint, created_at varchar(50));
+
+
+Table User: user
++---------------+---------------+------+-----+---------+----------------+
+| Field         | Type          | Null | Key | Default | Extra          |
++---------------+---------------+------+-----+---------+----------------+
+| user_id       | bigint        | NO   | PRI | NULL    | auto_increment |
+| user_name     | varchar(30)   | YES  |     | NULL    |                |
+| user_password | varchar(1024) | YES  |     | NULL    |                |
+| contact       | varchar(20)   | YES  |     | NULL    |                |
+| role          | varchar(10)   | YES  |     | NULL    |                |
+| created_at    | datetime      | YES  |     | NULL    |                |
++---------------+---------------+------+-----+---------+----------------+
+
+
+
+Table Package: package
++-----------------+-------------+------+-----+---------+----------------+
+| Field           | Type        | Null | Key | Default | Extra          |
++-----------------+-------------+------+-----+---------+----------------+
+| package_id      | bigint      | NO   | PRI | NULL    | auto_increment |
+| shop_owner      | varchar(30) | YES  |     | NULL    |                |
+| cust_name       | varchar(30) | YES  |     | NULL    |                |
+| cust_location   | varchar(30) | YES  |     | NULL    |                |
+| cust_phone      | varchar(15) | YES  |     | NULL    |                |
+| pro_price       | double      | YES  |     | NULL    |                |
+| payment_method  | varchar(10) | YES  |     | NULL    |                |
+| service_fee     | double      | YES  |     | NULL    |                |
+| service_paid_by | varchar(30) | YES  |     | NULL    |                |
+| status          | varchar(15) | YES  |     | NULL    |                |
+| created_at      | varchar(20) | YES  |     | NULL    |                |
++-----------------+-------------+------+-----+---------+----------------+
+
+
+Table PackageList: PackageList
++---------------+--------------+------+-----+---------+----------------+
+| Field         | Type         | Null | Key | Default | Extra          |
++---------------+--------------+------+-----+---------+----------------+
+| listId        | bigint       | NO   | PRI | NULL    | auto_increment |
+| packages      | varchar(255) | NO   |     | NULL    |                |
+| total         | double       | YES  |     | 0       |                |
+| deliveryManId | varchar(10)  | YES  |     | NULL    |                |
+| created_at    | varchar(20)  | YES  |     | NULL    |                |
++---------------+--------------+------+-----+---------+----------------+
