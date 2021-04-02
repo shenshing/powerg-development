@@ -1,9 +1,12 @@
+const { response } = require('express');
 const e = require('express');
 const { rawListeners } = require('../database/dbService');
 const connection = require('../database/dbService');
 const { route } = require('./package');
 const router = require('express').Router();
 // const exist;
+// var exist = true;
+
 
 router.post('/addList', async(req, res) => {
     const date = new Date();
@@ -13,19 +16,13 @@ router.post('/addList', async(req, res) => {
 
     try {
         if(listId === null || listId === undefined) {
-            const listId = Math.floor(Math.random() * 10000);
-            //check if list id already exist in database
-            // const query = "SELECT * FROM PackageList WHERE listId = ?;";
-            // connection.query(query, [id], (err, result) => {
-            //     if(err) {
-            //         console.log(err);
-            //         res.status(404).json({
-            //             message: 'Something went wrong in our End'
-            //         })
-            //     } else {
-            //         if (result.length > 0) {
-            //             //listId already exist
-            //         }
+            
+            // for()
+            while(true) {
+                const listId = Math.floor(Math.random() * 10000);
+                let exist = await isListIdExist(listId);
+
+                if(exist === false) {
                     const query = "INSERT INTO PackageList(listId, packages, total, deliveryManId, created_at) VALUES(?, ?, ?, ?, ?);";
                     connection.query(query, [listId, package, total, deliveryManId, dateAdded], (err, result) => {
                         if(err) {
@@ -40,6 +37,35 @@ router.post('/addList', async(req, res) => {
                             })
                         }
                     })
+                    break;
+                }
+            }
+            //check if list id already exist in database
+            // const query = "SELECT * FROM PackageList WHERE listId = ?;";
+            // connection.query(query, [id], (err, result) => {
+            //     if(err) {
+            //         console.log(err);
+            //         res.status(404).json({
+            //             message: 'Something went wrong in our End'
+            //         })
+            //     } else {
+            //         if (result.length > 0) {
+            //             //listId already exist
+            //         }
+                    // const query = "INSERT INTO PackageList(listId, packages, total, deliveryManId, created_at) VALUES(?, ?, ?, ?, ?);";
+                    // connection.query(query, [listId, package, total, deliveryManId, dateAdded], (err, result) => {
+                    //     if(err) {
+                    //         console.log('ERROR: ' + err.message);
+                    //         res.status(500).json({
+                    //             message: err.message
+                    //         });
+                    //     } else {
+                    //         res.status(200).json({
+                    //             message: 'list created successful',
+                    //             listId: listId
+                    //         })
+                    //     }
+                    // })
             //     } 
             // })
             
@@ -144,64 +170,45 @@ router.post('/addList', async(req, res) => {
 })
 
 
-router.post('/checkNull', async(req, res) => {
+router.post('/checkNull', async(req, res, cb) => {
     const { data } = req.body;
-    const random = Math.floor(Math.random() * 10000);
-    // console.log(random);
-    console.log(checkListId(1));
-    // checkListId();
-
-    if(data === null) {
-        res.status(404).json({
-            message: 'body is null'
-        })
-    } else if (data === undefined) {
-        res.status(404).json({
-            message: 'body is undefined'
-        })
-    } else {
-        res.status(200).json({
-                message: 'body is ' + data
-        })
+    let count = 0;
+    while(true) {
+        let listId = Math.floor(Math.random() * 10);
+        let a = await isListIdExist(listId);
+        
+        console.log(listId);
+        
+        if(a === false) {
+            break;
+        }
+        count ++;
     }
+    console.log('count = ' + count);
+    res.status(200).json({
+        message: 'finished'
+    })
 })
 
+// var exist = true;
 
-function checkListId() {
-    const query = "SELECT * FROM PackageList WHERE listId = 1;";
-    // loop1
-    connection.query(query, (err, result) => {
-        // if(err) {
-        //     return false;
-        //     // console.log(err);
-        // } else {
-        //     return false;
-        //     // console.log(result);
-        // }
-        loop1;
-        if(result.length > 0) {
-            console.log('hello');
-            continue loop1;
-        }
+function isListIdExist(id) {
+    return new Promise(function(resolve, reject) {
+        const query = "SELECT * FROM PackageList WHERE listId = ?;";
+        connection.query(query, id, (err, result) => {
+            console.log('length: ' + result.length);
+            console.log('result data ' + result[0]);
+            console.log('-----------');
+            
+            // return;
+            
+            if(result.length > 0) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        })
     })
-    // continue loop1;
-    // console.log(result);
-
-    // loop1:
-
-
-
-    // let str = '';
-
-    // loop1:
-    // for (let i = 0; i < 5; i++) {
-    // if (i === 3) {
-    //     continue loop1;
-    // }
-    // str = str + i;
-    // }
-
-    // console.log(str);
 }
 // router.get('/getListById/:listId/:user', async(req, res) => {
 //     const id = parseInt(req.params.listId);
