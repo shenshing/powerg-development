@@ -23,7 +23,7 @@ router.post('/addList', async(req, res) => {
                 let exist = await isListIdExist(listId);
 
                 if(exist === false) {
-                    const query = "INSERT INTO PackageList(listId, packages, total, deliveryManId, created_at) VALUES(?, ?, ?, ?, ?);";
+                    const query = "INSERT INTO PackageLists(listId, packages, total, deliveryManId, created_at) VALUES(?, ?, ?, ?, ?);";
                     connection.query(query, [listId, package, total, deliveryManId, dateAdded], (err, result) => {
                         if(err) {
                             console.log('ERROR: ' + err.message);
@@ -71,7 +71,7 @@ router.post('/addList', async(req, res) => {
             
         } else {
             // if listId already exist
-            const query = "SELECT packages FROM PackageList WHERE listId = ?;";
+            const query = "SELECT packages FROM PackageLists WHERE listId = ?;";
             connection.query(query, listId, (err, result) => {
                 if(err) {
                     console.log(err);
@@ -81,7 +81,7 @@ router.post('/addList', async(req, res) => {
                 } else {
                     let existPackage = result[0].packages;
                     existPackage = existPackage + ',' + package;
-                    const query = "UPDATE PackageList SET packages = ? WHERE listId  = ? AND deliveryManId = ?;";
+                    const query = "UPDATE PackageLists SET packages = ? WHERE listId  = ? AND deliveryManId = ?;";
                     connection.query(query, [existPackage, listId, deliveryManId], (err, result) => {
                         if(err) {
                             console.log(err);
@@ -194,7 +194,7 @@ router.post('/checkNull', async(req, res, cb) => {
 
 function isListIdExist(id) {
     return new Promise(function(resolve, reject) {
-        const query = "SELECT * FROM PackageList WHERE listId = ?;";
+        const query = "SELECT * FROM PackageLists WHERE listId = ?;";
         connection.query(query, id, (err, result) => {
             console.log('length: ' + result.length);
             console.log('result data ' + result[0]);
@@ -241,7 +241,7 @@ function isListIdExist(id) {
 router.get('/getListById/:listId/:user', async(req, res) => {
     const id = parseInt(req.params.listId);
     const delivery_man_id = parseInt(req.params.user);
-    const query = "SELECT * FROM PackageList WHERE listId = ? AND deliveryManId = ?;";
+    const query = "SELECT * FROM PackageLists WHERE listId = ? AND deliveryManId = ?;";
     connection.query(query, [id, delivery_man_id], (err, result) => {
         // var array = [];
         if(err) {
@@ -251,7 +251,7 @@ router.get('/getListById/:listId/:user', async(req, res) => {
             })
         } else {
             const idData = result[0].packages.split(',');
-                const query = "SELECT * FROM package WHERE package_id in (?)";
+                const query = "SELECT * FROM Packages WHERE package_id in (?)";
                 connection.query(query, [idData], (err, result) => {
                     if(err) {
                         console.log("ERROR: " + err.message);

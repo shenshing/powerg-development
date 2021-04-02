@@ -12,7 +12,7 @@ router.post('/addPackage', async (req, res) => {
     const status = 'PENDING';
     const { shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by } = req.body;
     try {
-        const query = "INSERT INTO package(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        const query = "INSERT INTO Packages(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         connection.query(query, [shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, status, dateAdded], async (err, result) => {
             // console.log(result);
             if (err) {
@@ -48,7 +48,7 @@ router.post('/addPackage', async (req, res) => {
 
 router.get('/getAllPackage', async (req, res) => {
     try {
-        const query = "SELECT * FROM package;";
+        const query = "SELECT * FROM Packages;";
         connection.query(query, async (err, result) => {
             if (err) {
                 console.log(err);

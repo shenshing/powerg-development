@@ -28,7 +28,7 @@ router.post('/register', async(req, res) => {
     try {
         const dateAdded = new Date();
         const user_role = 'user';
-        const query = ('SELECT user_name FROM user WHERE user_name=?;');
+        const query = ('SELECT user_name FROM Users WHERE user_name=?;');
         connection.query(query, [name], (err, result) => {
             if (err) {
                 console.log(err.message);
@@ -42,7 +42,7 @@ router.post('/register', async(req, res) => {
                     })
                 } else {
                     // console.log('email not exist');
-                    const query = "INSERT INTO user (user_name, user_password, contact, role, created_at) VALUES (?, ?, ?, ?, ?);";
+                    const query = "INSERT INTO Users (user_name, user_password, contact, role, created_at) VALUES (?, ?, ?, ?, ?);";
                     connection.query(query, [name, hashedPassword, contact, user_role, dateAdded], (err, result) => {
                         if (err) {
                             console.log(err.message);
@@ -69,7 +69,7 @@ router.post('/login', async(req, res) => {
     if (error) return res.status(400).send(error.details[0].message);
     const { name, password } = req.body;
 
-    const query = ('SELECT * FROM user WHERE user_name=?;');
+    const query = ('SELECT * FROM Users WHERE user_name=?;');
     connection.query(query, [name], async(err, user) => {
             if (err) {
                 console.log("ERROR: " + err.message);
@@ -105,7 +105,7 @@ router.post('/login', async(req, res) => {
 
 router.get('/getuserbyid/:id', async(req, res) => {
     const id = req.params.id;
-    const query = ("SELECT * FROM user WHERE user_id=?;");
+    const query = ("SELECT * FROM Users WHERE user_id=?;");
     connection.query(query, [id], (err, user) => {
         if (err) {
             console.log("ERROR: " + err.message);
@@ -122,7 +122,7 @@ router.get('/getuserbyid/:id', async(req, res) => {
 
 router.get('/getallusers', authRole('admin'), async(req, res) => {
 // router.get('/getallusers', async(req, res) => {
-    const query = ("SELECT * FROM user WHERE role='user';");
+    const query = ("SELECT * FROM Users WHERE role='user';");
     connection.query(query, (err, users) => {
         if (err) {
             console.log("ERROR: " + err.message);
@@ -148,7 +148,7 @@ router.delete('/deleteuserbyid/:id', authRole('admin'), async(req, res) => {
 // router.delete('/deleteuserbyid/:id', async(req, res) => {
     const id = req.params.id;
     // console.log(id);
-    const query = ("DELETE FROM user where user_id=? AND role='user';");
+    const query = ("DELETE FROM Users where user_id=? AND role='user';");
     connection.query(query, [id], (err, result) => {
         // console.log(result);
         if (err) {
@@ -177,7 +177,7 @@ router.put('/updateinfo/:id', authRole('admin'), async(req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    const a_query = ("SELECT * FROM user WHERE user_name=?;");
+    const a_query = ("SELECT * FROM Users WHERE user_name=?;");
     connection.query(a_query, [name], (err, result) => {
         if (err) {
             console.log("ERROR: " + err.message);
@@ -190,7 +190,7 @@ router.put('/updateinfo/:id', authRole('admin'), async(req, res) => {
                     message: 'duplicate user name',
                 });
             } else {
-                const query = ("UPDATE user SET user_name=?, user_password=?, contact=? WHERE user_id=?;");
+                const query = ("UPDATE Users SET user_name=?, user_password=?, contact=? WHERE user_id=?;");
                 connection.query(query, [name, hashedPassword, contact, id], (err, result) => {
                     if (err) {
                         console.log("ERROR: " + err.message);

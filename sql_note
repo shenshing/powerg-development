@@ -1,14 +1,16 @@
 Powerg Dev:
    sql:
-      -user: 
+      -Users: 
           CREATE TABLE user(user_id bigint auto_increment primary key, user_name varchar(30), user_password varchar(1024), contact varchar(20), role varchar(10), created_at datetime);
 
+      -Packages
+          create table Packages(package_id bigint auto_increment primary key, shop_owner varchar(30), cust_name varchar(30), cust_location varchar(30), cust_phone varchar(15), pro_price double, payment_method varchar(10), service_fee double, service_paid_by varchar(30), status varchar(15), created_at varchar(20));
 
-      -PackageList
+      -PackageLists
           create table PackageList(id bigint auto_increment primary key, listId bigint NOT NULL, packages varchar(255),total double NOT NULL, deliveryManId bigint, created_at varchar(50));
 
 
-Table User: user
+Table User: Users
 +---------------+---------------+------+-----+---------+----------------+
 | Field         | Type          | Null | Key | Default | Extra          |
 +---------------+---------------+------+-----+---------+----------------+
@@ -22,7 +24,7 @@ Table User: user
 
 
 
-Table Package: package
+Table Package: Packages
 +-----------------+-------------+------+-----+---------+----------------+
 | Field           | Type        | Null | Key | Default | Extra          |
 +-----------------+-------------+------+-----+---------+----------------+
@@ -40,7 +42,7 @@ Table Package: package
 +-----------------+-------------+------+-----+---------+----------------+
 
 
-Table PackageList: PackageList
+Table PackageList: PackageLists
 +---------------+--------------+------+-----+---------+----------------+
 | Field         | Type         | Null | Key | Default | Extra          |
 +---------------+--------------+------+-----+---------+----------------+
