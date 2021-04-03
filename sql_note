@@ -9,6 +9,8 @@ Powerg Dev:
       -PackageLists
           create table PackageLists(id bigint auto_increment primary key, listId bigint NOT NULL, packages varchar(255),total double NOT NULL, deliveryManId bigint, created_at varchar(50));
 
+      -Shops
+          create table Shops(id bigint auto_increment primary key, shopName varchar(100) NOT NULL, shopContact varchar(20) NOT NULL, shopAddress varchar(255), ownerName varchar(100), ownerContact varchar(20), ownerAddress varchar(255), createdAt varchar(20));
 
 Table User: Users
 +---------------+---------------+------+-----+---------+----------------+
@@ -59,3 +61,28 @@ Table PackageList: PackageLists
 | deliveryManId | varchar(10)  | YES  |     | NULL    |                |
 | created_at    | varchar(20)  | YES  |     | NULL    |                |
 +---------------+--------------+------+-----+---------+----------------+
+
+
+Table Shops: Shops
++--------------+--------------+------+-----+---------+----------------+
+| Field        | Type         | Null | Key | Default | Extra          |
++--------------+--------------+------+-----+---------+----------------+
+| id           | bigint       | NO   | PRI | NULL    | auto_increment |
+| shopName     | varchar(100) | NO   |     | NULL    |                |
+| shopContact  | varchar(20)  | NO   |     | NULL    |                |
+| shopAddress  | varchar(255) | YES  |     | NULL    |                |
+| ownerName    | varchar(100) | YES  |     | NULL    |                |
+| ownerContact | varchar(20)  | YES  |     | NULL    |                |
+| ownerAddress | varchar(255) | YES  |     | NULL    |                |
+| createdAt    | varchar(20)  | YES  |     | NULL    |                |
++--------------+--------------+------+-----+---------+----------------+
+
+
+Connection:
+
+USERNAME=shing
+PASSWORD=123
+DATABASE=powergDEV
+HOST=localhost
+DB_PORT=3306
+TOKEN_SECRET = abc

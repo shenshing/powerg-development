@@ -1,39 +1,26 @@
 const router = require('express').Router();
 const connection = require('../database/dbService');
-// const router = require('../routes/auth');
+const { authRole } = require('../routes/validation');
 
-
-// SELECT *
-// FROM events
-// where event_date between '2018-01-01' and '2018-01-31';
-
-const query_by_date = (start, end) => {
-    let query_result;
-    // const query = "SELECT * FROM package WHERE created_at BETWEEN ? AND ?;";
-    const query = "SELECT * FROM package WHERE created_at = ?;"
-    connection.query(query, [start], (err, result) => {
-        // if (err) console.log('ERROR: ' + err.message);
-        if (err) return 'ERROR: ' + err.message;
-        console.log(result);
-        // return result;
-        query_result = result;
-    });
-    return query_result;
-}
+// const query_by_date = (start, end) => {
+//     let query_result;
+//     const query = "SELECT * FROM package WHERE created_at = ?;"
+//     connection.query(query, [start], (err, result) => {
+//         if (err) return 'ERROR: ' + err.message;
+//         console.log(result);
+//         // return result;
+//         query_result = result;
+//     });
+//     return query_result;
+// }
 
 
 router.get('/generateReport', (req, res) => {
-    // const data = query_by_date('2021-03-12', '2021-03-13');
-    // const start = '2021-03-10';
-    // const end = '2021-03-11';
-
     const start = req.header('start-date');
-    // const end = req.header('end-date');
     const shop = req.header('shop');
 
     const query = "SELECT * FROM package WHERE created_at = ? AND shop_owner = ?;";
     connection.query(query, [start, shop], (err, packages) => {
-        // if (err) console.log('ERROR: ' + err.message);
         if (err) {
             return res.status(404).json({
                 message: err.message
@@ -83,19 +70,74 @@ router.get('/generateReport', (req, res) => {
 
         return res.status(200).json({
             message: "ok",
-            // data: [case1, case2, case3, case4],
             total_package: packages.length,
             success: total_success,
             unsuccess: total_unsuccess,
             total_amount
         })
     });
+});
 
-    // console.log(data);
-    // res.status(200).json({
-    //     message: 'from generateReport',
-    //     data: data
-    // })
+router.post('/register', authRole('admin'), (req, res) => {
+    const date = new Date();
+    const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
+    const { shopName, shopContact, shopAddress, ownerName, ownerContact, ownerAddress } = req.body;
+
+    const query = "SELECT * FROM Shops WHERE shopName = ?;";
+    connection.query(query, shopName, (err, result) => {
+        if(err) {
+            console.log(err);
+            res.status(404).json({
+                message: err.message
+            })
+        } else {
+            if(result.length > 0) {
+                res.status(409).json({
+                    message: 'shop already exist'
+                })
+            } else {
+                const query = "INSERT IGNORE INTO Shops(shopName, shopContact, shopAddress, ownerName, ownerContact, ownerAddress, createdAt) VALUES(?, ?, ?, ?, ?, ?, ?);";
+                connection.query(query, [shopName, shopContact, shopAddress, ownerName, ownerContact, ownerAddress, dateAdded], (err, result) => {
+                    if (err) {
+                        console.log(err);
+                        res.status(404).json({
+                            message: err.message
+                        })
+                    } else {
+                        // console.log(result);
+                        res.status(200).json({
+                            message: 'success',
+                            shopId: result.insertId
+                        })
+                    }
+                })
+            }
+        }
+    });
+});
+
+router.get('/getAllShops', authRole('admin'), (req, res) => {
+    const query = "SELECT * FROM Shops";
+    connection.query(query, (err, result) => {
+        if(err) {
+            console.log(err);
+            res.status(404).json({
+                message: err.message
+            })
+        } else {
+            if(result.length === 0) {
+                res.status(204).json({
+                    message: 'no shop exist',
+                })
+            } else {
+                res.status(200).json({
+                    message: 'success',
+                    data: result,
+                    totalShop: result.length
+                })
+            }
+        }
+    })
 })
 
 module.exports = router;

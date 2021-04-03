@@ -34,7 +34,7 @@ app.use(express.json());
 app.use('/', server);
 app.use('/api/user', authRoute);
 app.use('/package', Package);
-app.use('/shopReport', shopReport);
+app.use('/shop', shopReport);
 app.use('/packageList', packageList);
 
 
