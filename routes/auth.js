@@ -22,42 +22,39 @@ router.post('/register', async(req, res) => {
     const { name, password, contact } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-                        
-    try {
-        const dateAdded = new Date();
-        const user_role = 'user';
-        const query = ('SELECT user_name FROM Users WHERE user_name=?;');
-        connection.query(query, [name], (err, result) => {
-            if (err) {
-                console.log(err.message);
-                res.status(404).json({
-                    message: 'Something went wrong in our End'
+           
+    const dateAdded = new Date();
+    const user_role = 'user';
+    const query = ('SELECT user_name FROM Users WHERE user_name=?;');
+    connection.query(query, [name], (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.status(404).json({
+                message: 'Something went wrong in our End'
+            })
+        } else {
+            if(result.length > 0) {
+                res.status(400).json({
+                    message: 'Name already in use'
                 })
             } else {
-                if(result.length > 0) {
-                    res.status(400).json({
-                        message: 'Name already in use'
-                    })
-                } else {
-                    const query = "INSERT INTO Users (user_name, user_password, contact, role, created_at) VALUES (?, ?, ?, ?, ?);";
-                    connection.query(query, [name, hashedPassword, contact, user_role, dateAdded], (err, result) => {
-                        if (err) {
-                            console.log(err.message);
-                            res.status(404).json({
-                                message: 'Something went wrong in our End'
-                            })
-                        } else {
-                            res.status(200).json({
-                                message: "Successful Register"
-                            })
-                        }
-                    })
-                }
+                const query = "INSERT INTO Users (user_name, user_password, contact, role, created_at) VALUES (?, ?, ?, ?, ?);";
+                connection.query(query, [name, hashedPassword, contact, user_role, dateAdded], (err, result) => {
+                    if (err) {
+                        console.log(err.message);
+                        res.status(404).json({
+                            message: 'Something went wrong in our End'
+                        })
+                    } else {
+                        res.status(200).json({
+                            message: "Successful Register"
+                        })
+                    }
+                })
             }
-        });
-    } catch (error) {
-        console.log(error);
-    }
+        }
+    });
+    
 });
 
 
@@ -140,7 +137,6 @@ router.get('/getallusers', authRole('admin'), async(req, res) => {
 
 router.delete('/deleteuserbyid/:id', authRole('admin'), async(req, res) => {
     const id = req.params.id;
-    // console.log(id);
     const query = ("DELETE FROM Users where user_id=? AND role='user';");
     connection.query(query, [id], (err, result) => {
         if (err) {
