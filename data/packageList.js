@@ -4,8 +4,7 @@ const { rawListeners } = require('../database/dbService');
 const connection = require('../database/dbService');
 const { route } = require('./package');
 const router = require('express').Router();
-// const exist;
-// var exist = true;
+const { authRole } = require('../routes/validation');
 
 
 router.post('/addList', async(req, res) => {
@@ -103,65 +102,6 @@ router.post('/addList', async(req, res) => {
                 }
             })
         }
-        // const query = "SELECT * FROM PackageList WHERE listId = ?;";
-        // connection.query(query, [listId], (err, result) => {
-        //     if(err) {
-        //         console.log('ERROR: ' + err.message);
-        //         res.status(500).json({
-        //             message: err.message,
-        //         });
-        //     } else {
-        //         if(result.length === 0) {
-        //             const query = "INSERT INTO PackageList(listId, packages, total, deliveryManId, created_at) VALUES(?, ?, ?, ?, ?);";
-        //             connection.query(query, [listId, package, total, deliveryManId, dateAdded], (err, result) => {
-        //                 if(err) {
-        //                     console.log(err);
-        //                     res.status(404).json({
-        //                         message: 'Something went wrong in our End'
-        //                     })
-        //                 } else {
-        //                     res.status(200).json({
-        //                         message: 'list created successful',
-        //                     })
-        //                 }
-        //             })
-        //         } else {
-        //             const query = "SELECT packages FROM PackageList WHERE listId = ?;";
-        //             connection.query(query, listId, (err, result) => {
-        //                 if(err) {
-        //                     console.log(err);
-        //                     res.status(404).json({
-        //                         message: 'Something went wrong in our End'
-        //                     })
-        //                 } else {
-        //                     let existPackage = result[0].packages;
-        //                     existPackage = existPackage + ',' + package;
-        //                     const query = "UPDATE PackageList SET packages = ? WHERE listId  = ? AND deliveryManId = ?;";
-        //                     connection.query(query, [existPackage, listId, deliveryManId], (err, result) => {
-        //                         if(err) {
-        //                             console.log(err);
-        //                             res.status(404).json({
-        //                                 message: err.message
-        //                             })
-        //                         } else {
-        //                             if(result.affectedRows === 0) {
-        //                                 res.status(404).json({
-        //                                     message: 'Something went wrong in our End'
-        //                                 })
-        //                             } else {
-        //                                 res.status(200).json({
-        //                                     message: 'package added'
-        //                                 })
-        //                             }
-        //                         }
-        //                     })
-        //                 }
-        //             })
-        //         }
-        //     }
-            
-
-        // })
     } catch (error) {
         res.status(404).json({
             message: error.message
@@ -190,18 +130,17 @@ router.post('/checkNull', async(req, res, cb) => {
     })
 })
 
-// var exist = true;
 
 function isListIdExist(id) {
     return new Promise(function(resolve, reject) {
         const query = "SELECT * FROM PackageLists WHERE listId = ?;";
         connection.query(query, id, (err, result) => {
-            console.log('length: ' + result.length);
-            console.log('result data ' + result[0]);
-            console.log('-----------');
-            
-            // return;
-            
+            // console.log('length: ' + result.length);
+            // console.log('result data ' + result[0]);
+            // console.log('-----------');
+            if(err) {
+                resolve(false);
+            }
             if(result.length > 0) {
                 resolve(true);
             } else {
@@ -210,35 +149,7 @@ function isListIdExist(id) {
         })
     })
 }
-// router.get('/getListById/:listId/:user', async(req, res) => {
-//     const id = parseInt(req.params.listId);
-//     const delivery_man_id = parseInt(req.params.user);
-       
-    
-//     const query = "SELECT * FROM PackageList WHERE listId = ? AND deliveryManId = ?;";
-//     connection.query(query, [id, delivery_man_id], (err, result) => {
-//         if(err) {
-//             console.log(err);
-//             res.status(404).json({
-//                 message: 'Something went wrong in our End'
-//             })
-//         } else {
-//             for(let i=0; i<packageListId.length; i++) {
-//                 const query = "SELECT * FROM package WHERE package_id = ?;";
-//                 connection.query(query, packageListId[i], (err, result) => {
-//                     if(err) {
-//                         console.log(err);
-//                         res.status(404).json({
-//                             message: 'package not found'
-//                         })
-//                     } else {
-//                         packageListData.push(result[0]);
-//                     }
-//                 }
-        
-//             })
-
-router.get('/getListById/:listId/:user', async(req, res) => {
+router.get('/getListById/:listId', authRole('admin'), async(req, res) => {
     const id = parseInt(req.params.listId);
     const delivery_man_id = parseInt(req.params.user);
     const query = "SELECT * FROM PackageLists WHERE listId = ? AND deliveryManId = ?;";
@@ -270,53 +181,3 @@ router.get('/getListById/:listId/:user', async(req, res) => {
 })
 module.exports = router;
 
-
-// else {
-//     if(result.length === 0) {
-//         const query = "INSERT INTO PackageList(listId, packages, total, deliveryManId, created_at) VALUES(?, ?, ?, ?, ?);";
-//         connection.query(query, [listId, package, total, deliveryManId, dateAdded], (err, result) => {
-//             if(err) {
-//                 console.log(err);
-//                 res.status(404).json({
-//                     message: 'Something went wrong in our End'
-//                 })
-//             } else {
-//                 res.status(200).json({
-//                     message: 'list created successful',
-//                 })
-//             }
-//         })
-//     } else {
-        // const query = "SELECT packages FROM PackageList WHERE listId = ?;";
-        // connection.query(query, listId, (err, result) => {
-        //     if(err) {
-        //         console.log(err);
-        //         res.status(404).json({
-        //             message: 'Something went wrong in our End'
-        //         })
-        //     } else {
-        //         let existPackage = result[0].packages;
-        //         existPackage = existPackage + ',' + package;
-        //         const query = "UPDATE PackageList SET packages = ? WHERE listId  = ? AND deliveryManId = ?;";
-        //         connection.query(query, [existPackage, listId, deliveryManId], (err, result) => {
-        //             if(err) {
-        //                 console.log(err);
-        //                 res.status(404).json({
-        //                     message: err.message
-        //                 })
-        //             } else {
-        //                 if(result.affectedRows === 0) {
-        //                     res.status(404).json({
-        //                         message: 'Something went wrong in our End'
-        //                     })
-        //                 } else {
-        //                     res.status(200).json({
-        //                         message: 'package added'
-        //                     })
-        //                 }
-        //             }
-        //         })
-        //     }
-        // })
-//     }
-// }
