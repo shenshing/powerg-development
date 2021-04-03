@@ -178,6 +178,24 @@ router.get('/getListById/:listId', async(req, res) => {
         }
     })
     
+});
+
+router.get('/getAllLists', authRole('admin'), (req, res) => {
+    const query = "SELECT * FROM PackageLists;"
+    connection.query(query, (err, result) => {
+        if(err) {
+            console.log(err);
+            return res.status(404).json({
+                message: err.message
+            })
+        } else {
+            return res.status(200).json({
+                message: 'success',
+                data: result,
+                totalList: result.length
+            })
+        }
+    })
 })
 module.exports = router;
 
