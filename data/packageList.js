@@ -149,10 +149,10 @@ function isListIdExist(id) {
         })
     })
 }
-router.get('/getListById/:listId', authRole('admin'), async(req, res) => {
+router.get('/getListById/:listId', async(req, res) => {
     const id = parseInt(req.params.listId);
     const delivery_man_id = parseInt(req.params.user);
-    const query = "SELECT * FROM PackageLists WHERE listId = ? AND deliveryManId = ?;";
+    const query = "SELECT * FROM PackageLists WHERE listId = ?;";
     connection.query(query, [id, delivery_man_id], (err, result) => {
         // var array = [];
         if(err) {
