@@ -13,7 +13,6 @@ const jwt = require('jsonwebtoken');
 
 router.post('/register', async(req, res) => {
     const { error } = registerValidation(req.body);
-    // if (error) return res.status(400).send(error.details[0].message);
     if (error) {
         console.log("ERROR: " + error.message);
         return res.status(400).json({
@@ -21,7 +20,6 @@ router.post('/register', async(req, res) => {
         })
     }
     const { name, password, contact } = req.body;
-    // console.log(name + " " + password + " " + contact);
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
                         
@@ -41,7 +39,6 @@ router.post('/register', async(req, res) => {
                         message: 'Name already in use'
                     })
                 } else {
-                    // console.log('email not exist');
                     const query = "INSERT INTO Users (user_name, user_password, contact, role, created_at) VALUES (?, ?, ?, ?, ?);";
                     connection.query(query, [name, hashedPassword, contact, user_role, dateAdded], (err, result) => {
                         if (err) {
@@ -84,7 +81,6 @@ router.post('/login', async(req, res) => {
                         auth: false
                     });
                     const signed_token = jwt.sign({id: user[0].user_id, role: user[0].role, auth: true}, process.env.TOKEN_SECRET);
-                    // res.header('auth-token', token).send(token);
                     res.status(200).json({
                         token: signed_token,
                         auth: true,
@@ -97,7 +93,6 @@ router.post('/login', async(req, res) => {
                         auth: false
                     })
                 }
-                // console.log(user);
             }
         });
 
@@ -121,7 +116,6 @@ router.get('/getuserbyid/:id', async(req, res) => {
 });
 
 router.get('/getallusers', authRole('admin'), async(req, res) => {
-// router.get('/getallusers', async(req, res) => {
     const query = ("SELECT * FROM Users WHERE role='user';");
     connection.query(query, (err, users) => {
         if (err) {
@@ -145,19 +139,16 @@ router.get('/getallusers', authRole('admin'), async(req, res) => {
 });
 
 router.delete('/deleteuserbyid/:id', authRole('admin'), async(req, res) => {
-// router.delete('/deleteuserbyid/:id', async(req, res) => {
     const id = req.params.id;
     // console.log(id);
     const query = ("DELETE FROM Users where user_id=? AND role='user';");
     connection.query(query, [id], (err, result) => {
-        // console.log(result);
         if (err) {
             console.log("ERROR: " + err.message);
             res.status(500).json({
                 message: err.message,
             })
         } else {
-            // console.log(result);
             if (result.affectedRows == 0) {
                 return res.status(500).json({
                     message: 'unable to delete this user'
@@ -171,7 +162,6 @@ router.delete('/deleteuserbyid/:id', authRole('admin'), async(req, res) => {
 });
 
 router.put('/updateinfo/:id', authRole('admin'), async(req, res) => {
-// router.put('/updateinfo/:id', async(req, res) => {
     const id = req.params.id;
     const { name, password, contact } = req.body;
     const salt = await bcrypt.genSalt(10);

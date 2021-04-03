@@ -2,19 +2,6 @@ const router = require('express').Router();
 const connection = require('../database/dbService');
 const { authRole } = require('../routes/validation');
 
-// const query_by_date = (start, end) => {
-//     let query_result;
-//     const query = "SELECT * FROM package WHERE created_at = ?;"
-//     connection.query(query, [start], (err, result) => {
-//         if (err) return 'ERROR: ' + err.message;
-//         console.log(result);
-//         // return result;
-//         query_result = result;
-//     });
-//     return query_result;
-// }
-
-
 router.get('/generateReport', (req, res) => {
     const start = req.header('start-date');
     const shop = req.header('shop');
@@ -104,7 +91,6 @@ router.post('/register', authRole('admin'), (req, res) => {
                             message: err.message
                         })
                     } else {
-                        // console.log(result);
                         res.status(200).json({
                             message: 'success',
                             shopId: result.insertId
