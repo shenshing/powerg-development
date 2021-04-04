@@ -44,6 +44,8 @@ connection.getConnection((err, conn) => {
             }
         })
     }
+    // connection.realeaseConnection(conn);
+    connection.releaseConnection(conn);
     // console.log('connected to database');
 });
 
