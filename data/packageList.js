@@ -22,17 +22,27 @@ router.post('/addList', async(req, res) => {
                 let exist = await isListIdExist(listId);
 
                 if(exist === false) {
-                    const query = "INSERT INTO PackageLists(listId, packages, total, deliveryManId, created_at) VALUES(?, ?, ?, ?, ?);";
-                    connection.query(query, [listId, package, total, deliveryManId, dateAdded], (err, result) => {
+                    const query = "SELECT * FROM Users WHERE user_id = ?;";
+                    connection.query(query, [deliveryManId], (err, result) => {
                         if(err) {
-                            console.log('ERROR: ' + err.message);
+                            console.log('1ERROR: ' + err.message);
                             res.status(500).json({
                                 message: err.message
                             });
                         } else {
-                            res.status(200).json({
-                                message: 'list created successful',
-                                listId: listId
+                            const query = "INSERT INTO PackageLists(listId, packages, total, deliveryManId, deliveryManName, created_at) VALUES(?, ?, ?, ?, ?, ?);";
+                            connection.query(query, [listId, package, total, deliveryManId, result[0].user_name, dateAdded], (err, result) => {
+                                if(err) {
+                                    console.log('2ERROR: ' + err.message);
+                                    res.status(500).json({
+                                        message: err.message
+                                    });
+                                } else {
+                                    res.status(200).json({
+                                        message: 'list created successful',
+                                        listId: listId
+                                    })
+                                }
                             })
                         }
                     })
@@ -196,6 +206,25 @@ router.get('/getAllLists', authRole('admin'), (req, res) => {
             })
         }
     })
+});
+
+
+router.delete('/deleteList/:listId', authRole('admin'), (req, res) => {
+    const listId = req.params.listId;
+    const query = "DELETE FROM PackageLists WHERE listId = ?;";
+    connection.query(query, listId, (err, result) => {
+        if(err) {
+            console.log(err);
+            return res.status(404).json({
+                message: err.message
+            })
+        } else {
+            return res.status(200).json({
+                message: 'successful delete list',
+            })
+        }
+    })
 })
+
 module.exports = router;
 
