@@ -209,7 +209,7 @@ router.get('/getAllLists', authRole('admin'), (req, res) => {
 });
 
 
-router.delete('/deleteList/:listId', authRole('admin'), (req, res) => {
+router.delete('/deleteListById/:listId', authRole('admin'), (req, res) => {
     const listId = req.params.listId;
     const query = "DELETE FROM PackageLists WHERE listId = ?;";
     connection.query(query, listId, (err, result) => {
