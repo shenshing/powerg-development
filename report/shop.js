@@ -126,7 +126,7 @@ router.get('/getAllShops', authRole('admin'), (req, res) => {
             })
         } else {
             if(result.length === 0) {
-                res.status(204).json({
+                res.status(404).json({
                     message: 'no shop exist',
                 })
             } else {
@@ -138,6 +138,24 @@ router.get('/getAllShops', authRole('admin'), (req, res) => {
             }
         }
     })
+});
+
+router.delete('/deleteShop/:shopId', authRole('admin'), (req, res) => {
+    const shopId = req.params.shopId;
+    const query = "DELETE FROM Shops WHERE id = ?;";
+    connection.query(query, shopId, (err, result) => {
+        if(err) {
+            console.log(err);
+            return res.status(404).json({
+                message: err.message
+            })
+        } else {
+            return res.status(200).json({
+                message: 'successful delete shop',
+            })
+        }
+    })
 })
+
 
 module.exports = router;
