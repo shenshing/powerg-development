@@ -66,5 +66,16 @@ router.get('/getAllPackage', async (req, res) => {
             message: error.message
         });
     }
+});
+
+router.post('/finalUpdate', async(req, res) => {
+    const body = req.body;
+    console.log(body);
+
+    res.status(200).json({
+        message: 'ok'
+    })
 })
+
+
 module.exports = router;
