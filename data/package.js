@@ -70,16 +70,47 @@ router.get('/getAllPackage', async (req, res) => {
 
 router.post('/finalUpdate', async(req, res) => {
     const body = req.body;
-    console.log(body);
+    // console.log(body);
 
-    // console.log('--------------');
-    // const bodyList = body[0];
-    // console.log(bodyList);
+    // // console.log('--------------');
+    // // const bodyList = body[0];
+    // // console.log(bodyList);
 
-    console.log(body[1]);
-    res.status(200).json({
-        message: 'ok'
-    })
+    const totalIndex = body.length;
+    var success = [];
+    var unsuccess = [];
+
+    for(let i = 0; i<totalIndex; i++) {
+        let record = body[i];
+        let packageId = record.package_id;
+        let packageStatus = record.status;
+        const query = "UPDATE Packages SET status = ? WHERE package_id = ?;";
+        connection.query(query, [packageStatus, packageId], (err, result) => {
+            if(err) {
+                console.log(`error on package_id[${packageId}] : `+ err.message);
+                // success.push(`id: ${packageId} : unsuccess`);
+                unsuccess.push({
+                    errorPackageId: packageId,
+                    errorMessage: err.message
+                })
+                // unsuccess.push(packageId);
+            } else {
+                // success.push(`id: ${packageId} : success`); 
+                // console.log(result);
+                success.push(packageId);
+            }
+            if(i === totalIndex - 1) {
+                res.status(200).json({
+                    message: 'successful update',
+                    success: success,
+                    unsuccess: unsuccess
+                })
+            }
+        })
+    }
+    // res.status(200).json({
+    //     message: 
+    // })
 })
 
 
