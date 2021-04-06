@@ -72,9 +72,9 @@ router.post('/finalUpdate', async(req, res) => {
     const body = req.body;
     console.log(body);
 
-    console.log('--------------');
-    const bodyList = body[0];
-    console.log(bodyList);
+    // console.log('--------------');
+    // const bodyList = body[0];
+    // console.log(bodyList);
 
     res.status(200).json({
         message: 'ok'
