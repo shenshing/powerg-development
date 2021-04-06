@@ -38,9 +38,20 @@ router.post('/addList', async(req, res) => {
                                         message: err.message
                                     });
                                 } else {
-                                    res.status(200).json({
-                                        message: 'list created successful',
-                                        listId: listId
+                                    const status = "ON GOING";
+                                    const query = "UPDATE Packages SET status = ? WHERE package_id = ?;";
+                                    connection.query(query, [status, package], (err, result) => {
+                                        if(err) {
+                                            console.log('2ERROR: ' + err.message);
+                                            res.status(500).json({
+                                                message: err.message
+                                            });
+                                        } else {
+                                            res.status(200).json({
+                                                message: 'list created successful',
+                                                listId: listId
+                                            })
+                                        }
                                     })
                                 }
                             })
@@ -103,8 +114,20 @@ router.post('/addList', async(req, res) => {
                                     message: 'Something went wrong in our End'
                                 })
                             } else {
-                                res.status(200).json({
-                                    message: 'package added'
+                                const status = "ON GOING";
+                                const query = "UPDATE Packages SET status = ? WHERE package_id = ?;";
+                                connection.query(query, [status, package], (err, result) => {
+                                    if(err) {
+                                        console.log('ERROR: ' + err.message);
+                                        res.status(500).json({
+                                            message: err.message
+                                        });
+                                    } else {
+                                        res.status(200).json({
+                                            message: 'package added',
+                                            listId: listId
+                                        })
+                                    }
                                 })
                             }
                         }
