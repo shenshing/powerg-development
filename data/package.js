@@ -69,11 +69,11 @@ router.get('/getAllPackage', async (req, res) => {
 });
 
 router.post('/finalUpdate', async(req, res) => {
-    const body = req.body;
-    // console.log(body);
+    const {body} = req.body;
+    console.log(body);
 
-    const bodyList = body[0];
-    console.log(bodyList);
+    // const bodyList = body[0];
+    // console.log(bodyList);
 
     res.status(200).json({
         message: 'ok'
