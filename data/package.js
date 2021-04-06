@@ -69,7 +69,7 @@ router.get('/getAllPackage', async (req, res) => {
 });
 
 router.post('/finalUpdate', async(req, res) => {
-    const {body} = req.body;
+    const body = req.body;
     console.log(body);
 
     // console.log('--------------');
