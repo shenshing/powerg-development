@@ -16,7 +16,7 @@ const { authRole } = require('../routes/validation');
 
 
 router.get('/generateReport', (req, res) => {
-    const start = req.header('start-date');
+    const start = req.header('query_date');
     const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE created_at = ? AND shop_owner = ?;";
@@ -79,7 +79,7 @@ router.get('/generateReport', (req, res) => {
 
 
 router.get('/dailyShopReport', (req, res) => {
-    const date = req.header('date');
+    const date = req.header('query_date');
     const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE delivered_at = ? AND shop_owner = ?;";
@@ -145,7 +145,7 @@ router.get('/dailyShopReport', (req, res) => {
 });
 
 router.get('/dailyReport', (req, res) => {
-    const date = req.header('date');
+    const date = req.header('query_date');
     // const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE delivered_at = ?;";
