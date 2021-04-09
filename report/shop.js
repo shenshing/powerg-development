@@ -144,6 +144,72 @@ router.get('/dailyShopReport', (req, res) => {
     });
 });
 
+router.get('/dailyReport', (req, res) => {
+    const date = req.header('date');
+    const shop = req.header('shop');
+
+    const query = "SELECT * FROM Packages WHERE delivered_at = ?;";
+    connection.query(query, [date, shop], (err, packages) => {
+        if (err) {
+            return res.status(404).json({
+                message: err.message
+            })
+        } else if (packages.length <= 0) {
+            return res.status(404).json({
+                message: 'no data exist',
+            })
+        }
+        let total_amount = 0.00;
+        let total_success = 0;
+        let total_unsuccess = 0;
+        let total_ongoing = 0;
+        let case1 = 0;
+        let case2 = 0;
+        let case3 = 0;
+        let case4 = 0;
+        let shop_get;
+
+        packages.forEach(package => {
+            if (package.status === 'SUCCESS') {
+                total_success = total_success + 1;
+                if (package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
+                    shop_get = package.pro_price - package.service_fee;
+                    total_amount = total_amount + shop_get;
+                    case1 = case1 + 1;
+                }
+                if (package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
+                    shop_get = package.pro_price;
+                    total_amount = total_amount + shop_get;
+                    case2 = case2 + 1;
+                }
+                if (package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
+                    shop_get = -package.service_fee;
+                    total_amount = total_amount + shop_get;
+                    case3 = case3 + 1;
+                }
+                if (package.payment_method === 'Paid' && package.service_paid_by === 'Receiver') {
+                    shop_get = 0;
+                    total_amount = total_amount + shop_get;
+                    case4 = case4 + 1;
+                }
+            } else if(package.status === 'ON GOING') {
+                total_ongoing = total_ongoing + 1;
+            } else {
+                total_unsuccess = total_unsuccess + 1;
+            }
+        })
+
+        return res.status(200).json({
+            message: "ok",
+            total_package: packages.length,
+            success: total_success,
+            unsuccess: total_unsuccess,
+            ongoing: total_ongoing,
+            total_amount
+        })
+    });
+});
+
 router.post('/register', authRole('admin'), (req, res) => {
     const date = new Date();
     const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
