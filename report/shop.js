@@ -290,7 +290,7 @@ router.delete('/deleteShop/:shopId', authRole('admin'), (req, res) => {
 });
 
 router.get('/packageOfShopByDate', (req, res) => {
-    const date = req.header('date');
+    const date = req.header('query_date');
     const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE shop_owner = ? AND created_at = ?;";
