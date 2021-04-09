@@ -146,7 +146,7 @@ router.get('/dailyShopReport', (req, res) => {
 
 router.get('/dailyReport', (req, res) => {
     const date = req.header('date');
-    const shop = req.header('shop');
+    // const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE delivered_at = ?;";
     connection.query(query, [date, shop], (err, packages) => {
