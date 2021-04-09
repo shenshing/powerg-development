@@ -2,19 +2,26 @@ const connection = require('../database/dbService');
 const path = require('path');
 const QRCode = require('qrcode');
 const router = require('express').Router();
+const calculateCOD  = require('../services/service');
+const { get } = require('http');
 
 router.post('/addPackage', async (req, res) => {
     const date = new Date();
     const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-    // const dateAdded = date.getUTCDate() + (date.getUTCMonth() + 1) + date.getUTCFullYear();
-    // const dateAdded = mo
     console.log(dateAdded);
     const status = 'PENDING';
     const { shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by } = req.body;
+    const pack = {
+        payment_method: payment_method,
+        service_paid_by: service_paid_by,
+        pro_price: pro_price,
+        service_fee: service_fee
+    };
+    let package_price = calculateCOD(pack);
+    console.log(package_price);
     try {
-        const query = "INSERT INTO Packages(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        connection.query(query, [shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, status, dateAdded], async (err, result) => {
-            // console.log(result);
+        const query = "INSERT INTO Packages(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, package_price, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        connection.query(query, [shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, package_price, status, dateAdded], async (err, result) => {
             if (err) {
                 console.log(err);
                 res.status(404).json({
@@ -38,7 +45,6 @@ router.post('/addPackage', async (req, res) => {
             }
         })
     } catch (error) {
-        // console.log(error);
         res.status(404).json({
             message: error.message
         });
@@ -70,11 +76,6 @@ router.get('/getAllPackage', async (req, res) => {
 
 router.post('/finalUpdate', async(req, res) => {
     const body = req.body;
-    // console.log(body);
-
-    // // console.log('--------------');
-    // // const bodyList = body[0];
-    // // console.log(bodyList);
 
     const totalIndex = body.length;
     var success = [];
@@ -111,7 +112,137 @@ router.post('/finalUpdate', async(req, res) => {
     // res.status(200).json({
     //     message: 
     // })
-})
+});
+
+router.get('/getAllPackageByDate', (req, res) => {
+    const date = req.header('date');
+    const query = "SELECT * FROM Packages WHERE created_at = ?;"
+    connection.query(query, date, (err, result) => {
+        if(err) {
+            console.log(err);
+            res.status(404).json({
+                message: 'Something went wrong in our End'
+            })
+        } else {
+            if(result.length < 0) {
+                res.status(200).json({
+                    message: 'no information exist'
+                })
+            } else {
+                res.status(200).json({
+                    message: 'ok',
+                    data: result
+                })
+            }
+        }
+    })
+});
+
+router.get('/countOnGoingByDate', (req, res) => {
+    const date = req.header('date');
+    const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'ON GOING';";
+    connection.query(query, date, (err, result) => {
+        if(err) {
+            console.log(err);
+            res.status(404).json({
+                message: 'Something went wrong in our End'
+            })
+        } else {
+            if(result.length < 0) {
+                res.status(200).json({
+                    message: 'no information exist'
+                })
+            } else {
+                res.status(200).json({
+                    message: 'ok',
+                    total: result.length,
+                    data: result
+                })
+            }
+        }
+    })
+});
+
+router.get('/countPackageByDate', (req, res) => {
+    const date = req.header('date');
+    const query = "SELECT * FROM Packages WHERE created_at = ?;";
+    connection.query(query, date, (err, result) => {
+        if(err) {
+            console.log(err);
+            res.status(404).json({
+                message: 'Something went wrong in our End'
+            })
+        } else {
+            if(result.length < 0) {
+                res.status(200).json({
+                    message: 'no information exist'
+                })
+            } else {
+                res.status(200).json({
+                    message: 'ok',
+                    total: result.length,
+                    data: result
+                })
+            }
+        }
+    })
+});
+
+router.get('/countSuccessByDate', (req, res) => {
+    const date = req.header('date');
+
+    const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'SUCCESS';";
+    // const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'ON GOING';";
+    connection.query(query, date, (err, result) => {
+        if(err) {
+            console.log(err);
+            res.status(404).json({
+                message: 'Something went wrong in our End'
+            })
+        } else {
+            if(result.length === 0) {
+                res.status(200).json({
+                    message: 'no data exist',
+                    total: result.length,
+                    data: result
+                })
+            } else {
+                res.status(200).json({
+                    message: 'ok',
+                    total: result.length,
+                    data: result
+                })
+            }
+        }
+    })
+});
+
+router.get('/countUnSuccessByDate', (req, res) => {
+    const date = req.header('date');
+    const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'UNSUCCESS';";
+    connection.query(query, date, (err, result) => {
+        if(err) {
+            console.log(err);
+            res.status(404).json({
+                message: 'Something went wrong in our End'
+            })
+        } else {
+            if(result.length < 0) {
+                res.status(200).json({
+                    message: 'no information exist'
+                })
+            } else {
+                res.status(200).json({
+                    message: 'ok',
+                    total: result.length,
+                    data: result
+                })
+            }
+        }
+    })
+});
+
+
 
 
 module.exports = router;

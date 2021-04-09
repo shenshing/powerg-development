@@ -12,6 +12,7 @@ router.post('/addList', async(req, res) => {
     const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
     const { package, deliveryManId, listId } = req.body;
     const total = 0.00;
+    // const other = ' ';
 
     try {
         if(listId === null || listId === undefined) {
@@ -39,8 +40,8 @@ router.post('/addList', async(req, res) => {
                                     });
                                 } else {
                                     const status = "ON GOING";
-                                    const query = "UPDATE Packages SET status = ? WHERE package_id = ?;";
-                                    connection.query(query, [status, package], (err, result) => {
+                                    const query = "UPDATE Packages SET status = ?, delivered_at = ? WHERE package_id = ?;";
+                                    connection.query(query, [status, dateAdded, package], (err, result) => {
                                         if(err) {
                                             console.log('2ERROR: ' + err.message);
                                             res.status(500).json({
@@ -60,35 +61,6 @@ router.post('/addList', async(req, res) => {
                     break;
                 }
             }
-            //check if list id already exist in database
-            // const query = "SELECT * FROM PackageList WHERE listId = ?;";
-            // connection.query(query, [id], (err, result) => {
-            //     if(err) {
-            //         console.log(err);
-            //         res.status(404).json({
-            //             message: 'Something went wrong in our End'
-            //         })
-            //     } else {
-            //         if (result.length > 0) {
-            //             //listId already exist
-            //         }
-                    // const query = "INSERT INTO PackageList(listId, packages, total, deliveryManId, created_at) VALUES(?, ?, ?, ?, ?);";
-                    // connection.query(query, [listId, package, total, deliveryManId, dateAdded], (err, result) => {
-                    //     if(err) {
-                    //         console.log('ERROR: ' + err.message);
-                    //         res.status(500).json({
-                    //             message: err.message
-                    //         });
-                    //     } else {
-                    //         res.status(200).json({
-                    //             message: 'list created successful',
-                    //             listId: listId
-                    //         })
-                    //     }
-                    // })
-            //     } 
-            // })
-            
         } else {
             // if listId already exist
             const query = "SELECT packages FROM PackageLists WHERE listId = ?;";
@@ -115,8 +87,8 @@ router.post('/addList', async(req, res) => {
                                 })
                             } else {
                                 const status = "ON GOING";
-                                const query = "UPDATE Packages SET status = ? WHERE package_id = ?;";
-                                connection.query(query, [status, package], (err, result) => {
+                                const query = "UPDATE Packages SET status = ?, delivered_at = ? WHERE package_id = ?;";
+                                connection.query(query, [status, dateAdded, package], (err, result) => {
                                     if(err) {
                                         console.log('ERROR: ' + err.message);
                                         res.status(500).json({
