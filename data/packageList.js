@@ -92,7 +92,7 @@ router.post('/addList', async(req, res) => {
                                         })
                                     } else {
                                         const status = "ON GOING";
-                                        const query = "UPDATE Packages SET status = ?, delivered_at = ?, delivery_man_id = ? WHERE package_id = ?;"; ///
+                                        const query = "UPDATE Packages SET status = ?, delivered_at = ?, delivery_man_name = ? WHERE package_id = ?;"; ///
                                         connection.query(query, [status, dateAdded, delivery_man[0].user_name, package], (err, result) => {
                                             if(err) {
                                                 console.log('ERROR: ' + err.message);
