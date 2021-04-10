@@ -219,7 +219,7 @@ router.delete('/deleteListById/:listId', authRole('admin'), (req, res) => {
             })
         }
     })
-})
+});
 
 module.exports = router;
 
