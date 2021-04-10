@@ -12,19 +12,16 @@ router.post('/addList', async(req, res) => {
     const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
     const { package, deliveryManId, listId } = req.body;
     const total = 0.00;
-    // const other = ' ';
 
     try {
         if(listId === null || listId === undefined) {
-            
-            // for()
             while(true) {
                 const listId = Math.floor(Math.random() * 10000);
                 let exist = await isListIdExist(listId);
 
                 if(exist === false) {
                     const query = "SELECT * FROM Users WHERE user_id = ?;";
-                    connection.query(query, [deliveryManId], (err, result) => {
+                    connection.query(query, [deliveryManId], (err, delivery_man) => {
                         if(err) {
                             console.log('1ERROR: ' + err.message);
                             res.status(500).json({
@@ -32,18 +29,18 @@ router.post('/addList', async(req, res) => {
                             });
                         } else {
                             const query = "INSERT INTO PackageLists(listId, packages, total, deliveryManId, deliveryManName, created_at) VALUES(?, ?, ?, ?, ?, ?);";
-                            connection.query(query, [listId, package, total, deliveryManId, result[0].user_name, dateAdded], (err, result) => {
+                            connection.query(query, [listId, package, total, deliveryManId, delivery_man[0].user_name, dateAdded], (err, result) => {
                                 if(err) {
-                                    console.log('2ERROR: ' + err.message);
+                                    console.log('ERROR: ' + err.message);
                                     res.status(500).json({
                                         message: err.message
                                     });
                                 } else {
                                     const status = "ON GOING";
-                                    const query = "UPDATE Packages SET status = ?, delivered_at = ? WHERE package_id = ?;";
-                                    connection.query(query, [status, dateAdded, package], (err, result) => {
+                                    const query = "UPDATE Packages SET status = ?, delivered_at = ?, delivery_man_name = ? WHERE package_id = ?;"; ///
+                                    connection.query(query, [status, dateAdded, delivery_man[0].user_name, package], (err, result) => {
                                         if(err) {
-                                            console.log('2ERROR: ' + err.message);
+                                            console.log('ERROR: ' + err.message);
                                             res.status(500).json({
                                                 message: err.message
                                             });
@@ -73,37 +70,48 @@ router.post('/addList', async(req, res) => {
                 } else {
                     let existPackage = result[0].packages;
                     existPackage = existPackage + ',' + package;
-                    const query = "UPDATE PackageLists SET packages = ? WHERE listId  = ? AND deliveryManId = ?;";
-                    connection.query(query, [existPackage, listId, deliveryManId], (err, result) => {
+                    const query = "SELECT * FROM Users WHERE user_id = ?;";
+                    connection.query(query, deliveryManId, (err, delivery_man) => {
                         if(err) {
                             console.log(err);
                             res.status(404).json({
                                 message: err.message
                             })
                         } else {
-                            if(result.affectedRows === 0) {
-                                res.status(404).json({
-                                    message: 'Something went wrong in our End'
-                                })
-                            } else {
-                                const status = "ON GOING";
-                                const query = "UPDATE Packages SET status = ?, delivered_at = ? WHERE package_id = ?;";
-                                connection.query(query, [status, dateAdded, package], (err, result) => {
-                                    if(err) {
-                                        console.log('ERROR: ' + err.message);
-                                        res.status(500).json({
-                                            message: err.message
-                                        });
+                            const query = "UPDATE PackageLists SET packages = ? WHERE listId  = ? AND deliveryManId = ?;";
+                            connection.query(query, [existPackage, listId, deliveryManId], (err, result) => {
+                                if(err) {
+                                    console.log(err);
+                                    res.status(404).json({
+                                        message: err.message
+                                    })
+                                } else {
+                                    if(result.affectedRows === 0) {
+                                        res.status(404).json({
+                                            message: 'Something went wrong in our End'
+                                        })
                                     } else {
-                                        res.status(200).json({
-                                            message: 'package added',
-                                            listId: listId
+                                        const status = "ON GOING";
+                                        const query = "UPDATE Packages SET status = ?, delivered_at = ?, delivery_man_id = ? WHERE package_id = ?;"; ///
+                                        connection.query(query, [status, dateAdded, delivery_man[0].user_name, package], (err, result) => {
+                                            if(err) {
+                                                console.log('ERROR: ' + err.message);
+                                                res.status(500).json({
+                                                    message: err.message
+                                                });
+                                            } else {
+                                                res.status(200).json({
+                                                    message: 'package added',
+                                                    listId: listId
+                                                })
+                                            }
                                         })
                                     }
-                                })
-                            }
+                                }
+                            })
                         }
                     })
+                    
                 }
             })
         }
