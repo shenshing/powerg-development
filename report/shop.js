@@ -15,7 +15,7 @@ const { authRole } = require('../routes/validation');
 // }
 
 
-router.get('/generateReport', (req, res) => {
+router.get('/generateReport', authRole('admin'), (req, res) => {
     const start = req.header('query_date');
     const shop = req.header('shop');
 
@@ -78,7 +78,7 @@ router.get('/generateReport', (req, res) => {
 });
 
 
-router.get('/dailyShopReport', (req, res) => {
+router.get('/dailyShopReport', authRole('admin'), (req, res) => {
     const date = req.header('query_date');
     const shop = req.header('shop');
 
@@ -144,7 +144,7 @@ router.get('/dailyShopReport', (req, res) => {
     });
 });
 
-router.get('/dailyReport', (req, res) => {
+router.get('/dailyReport', authRole('admin'), (req, res) => {
     const date = req.header('query_date');
     // const shop = req.header('shop');
 
