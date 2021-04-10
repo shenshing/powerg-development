@@ -243,6 +243,21 @@ router.get('/countUnSuccessByDate', (req, res) => {
 });
 
 
-
+router.delete('/deletePackageById/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const query = "DELETE FROM Packages WHERE package_id = ?;";
+    connection.query(query, id, (err, result)=> {
+        if(err) {
+            console.log(err);
+            res.status(404).json({
+                message: 'Something went wrong in our End'
+            })
+        } else {
+            res.status(200).json({
+                message: 'package deleted'
+            })
+        }
+    })
+})
 
 module.exports = router;
