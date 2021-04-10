@@ -139,7 +139,7 @@ router.get('/getAllPackageByDate', (req, res) => {
 });
 
 router.get('/countOnGoingByDate', (req, res) => {
-    const date = req.header('date');
+    const date = req.header('query_date');
     const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'ON GOING';";
     connection.query(query, date, (err, result) => {
         if(err) {
@@ -189,7 +189,7 @@ router.get('/countPackageByDate', (req, res) => {
 });
 
 router.get('/countSuccessByDate', (req, res) => {
-    const date = req.header('date');
+    const date = req.header('query_date');
 
     const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'SUCCESS';";
     // const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'ON GOING';";
@@ -218,7 +218,7 @@ router.get('/countSuccessByDate', (req, res) => {
 });
 
 router.get('/countUnSuccessByDate', (req, res) => {
-    const date = req.header('date');
+    const date = req.header('query_date');
     const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'UNSUCCESS';";
     connection.query(query, date, (err, result) => {
         if(err) {
