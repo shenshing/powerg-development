@@ -165,7 +165,8 @@ router.get('/countOnGoingByDate', (req, res) => {
 
 router.get('/countPackageByDate', (req, res) => {
     const date = req.header('query_date');
-    const query = "SELECT * FROM Packages WHERE created_at = ?;";
+    console.log(date);
+    const query = "SELECT * FROM Packages WHERE created_at = (?);";
     connection.query(query, date, (err, result) => {
         if(err) {
             console.log(err);
