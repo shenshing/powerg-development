@@ -115,7 +115,7 @@ router.post('/finalUpdate', async(req, res) => {
 });
 
 router.get('/getAllPackageByDate', (req, res) => {
-    const date = req.header('date');
+    const date = req.header('query_date');
     const query = "SELECT * FROM Packages WHERE created_at = ?;"
     connection.query(query, date, (err, result) => {
         if(err) {
