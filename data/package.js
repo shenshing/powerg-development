@@ -193,7 +193,7 @@ router.get('/countSuccessByDate', (req, res) => {
 
     const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'SUCCESS';";
     // const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'ON GOING';";
-    connection.query(query, date, (err, result) => {
+    connection.query(query, query_date, (err, result) => {
         if(err) {
             console.log(err);
             res.status(404).json({
