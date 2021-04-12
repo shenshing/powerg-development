@@ -170,7 +170,8 @@ router.get('/countPackageByDate', (req, res) => {
         if(err) {
             console.log(err);
             res.status(404).json({
-                message: 'Something went wrong in our End'
+                message: 'Something went wrong in our End',
+                technicalError: err.message
             })
         } else {
             if(result.length < 0) {
