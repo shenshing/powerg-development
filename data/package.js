@@ -40,7 +40,8 @@ router.post('/addPackage', async (req, res) => {
                 // // })
                 // res.sendFile(path.join(__dirname, '../images', qr_id));
                 res.status(200).json({
-                    package_id: result.insertId
+                    package_id: result.insertId,
+                    message: 'Package successful added'
                 });
             }
         })
