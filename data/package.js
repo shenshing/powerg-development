@@ -120,7 +120,7 @@ router.get('/getAllPackageByDate', (req, res) => {
     // const query = "SELECT * FROM Packages WHERE created_at = ?;"
     const query = `SELECT * FROM Packages WHERE created_at = '${date}';`;
     console.log(query);
-    connection.query(query, date, (err, result) => {
+    connection.query(query,  (err, result) => {
         if(err) {
             console.log(err);
             res.status(404).json({
