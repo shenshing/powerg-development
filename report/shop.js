@@ -18,7 +18,8 @@ const { authRole } = require('../routes/validation');
 router.get('/generateReport', authRole('admin'), (req, res) => {
     // const start = req.header('query_date');
     const start = req.query.date;
-    const shop = req.header('shop');
+    const shop = req.query.shop;
+    // const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE created_at = ? AND shop_owner = ?;";
     connection.query(query, [start, shop], (err, packages) => {
@@ -82,7 +83,8 @@ router.get('/generateReport', authRole('admin'), (req, res) => {
 router.get('/dailyShopReport', authRole('admin'), (req, res) => {
     // const date = req.header('query_date');
     const date = req.query.date;
-    const shop = req.header('shop');
+    // const shop = req.header('shop');
+    const shop = req.query.shop;
 
     const query = "SELECT * FROM Packages WHERE delivered_at = ? AND shop_owner = ?;";
     connection.query(query, [date, shop], (err, packages) => {
