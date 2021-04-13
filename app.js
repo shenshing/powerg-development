@@ -29,6 +29,11 @@ const packageList = require('./data/packageList');
 // };
 
 // generateQR('etalket.com');
+// app.use()
+app.use(function(req, res, next) {
+    res.header('date', '*'),
+    next();
+});
 app.use(cors());
 app.use(express.json());
 app.use('/', server);

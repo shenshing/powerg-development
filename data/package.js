@@ -118,9 +118,9 @@ router.post('/finalUpdate', async(req, res) => {
 router.get('/getAllPackageByDate', (req, res) => {
     const date = req.header('date');
     // const query = "SELECT * FROM Packages WHERE created_at = ?;"
-    console.log(date);
+    // console.log(date);
     const query = `SELECT * FROM Packages WHERE created_at = '${date}';`;
-    console.log(query);
+    // console.log(query);
     connection.query(query,  (err, result) => {
         if(err) {
             console.log(err);
@@ -143,9 +143,9 @@ router.get('/getAllPackageByDate', (req, res) => {
 });
 
 router.get('/countOnGoingByDate', (req, res) => {
-    const date = req.header('query_date');
-    const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'ON GOING';";
-    connection.query(query, date, (err, result) => {
+    const date = req.header('date');
+    const query = `SELECT * FROM Packages WHERE created_at = '${date}' AND status = 'ON GOING';`;
+    connection.query(query, (err, result) => {
         if(err) {
             console.log(err);
             res.status(404).json({
@@ -168,7 +168,7 @@ router.get('/countOnGoingByDate', (req, res) => {
 });
 
 router.get('/countPackageByDate', (req, res) => {
-    const date = req.header('query_date');
+    const date = req.header('date');
     // console.log(date);
     // const query = "SELECT * FROM Packages WHERE created_at = ?;";
     const query = `SELECT * FROM Packages WHERE created_at = '${date}'`;
@@ -196,11 +196,11 @@ router.get('/countPackageByDate', (req, res) => {
 });
 
 router.get('/countSuccessByDate', (req, res) => {
-    const date = req.header('query_date');
+    const date = req.header('date');
 
-    const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'SUCCESS';";
+    const query = `SELECT * FROM Packages WHERE created_at = '${date}' AND status = 'SUCCESS';`;
     // const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'ON GOING';";
-    connection.query(query, query_date, (err, result) => {
+    connection.query(query, (err, result) => {
         if(err) {
             console.log(err);
             res.status(404).json({
@@ -225,9 +225,9 @@ router.get('/countSuccessByDate', (req, res) => {
 });
 
 router.get('/countUnSuccessByDate', (req, res) => {
-    const date = req.header('query_date');
-    const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'UNSUCCESS';";
-    connection.query(query, date, (err, result) => {
+    const date = req.header('date');
+    const query = `SELECT * FROM Packages WHERE created_at = '${date}' AND status = 'UNSUCCESS';`;
+    connection.query(query, (err, result) => {
         if(err) {
             console.log(err);
             res.status(404).json({
