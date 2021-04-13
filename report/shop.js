@@ -2,24 +2,10 @@ const router = require('express').Router();
 const connection = require('../database/dbService');
 const { authRole } = require('../routes/validation');
 
-// const query_by_date = (start, end) => {
-//     let query_result;
-//     const query = "SELECT * FROM package WHERE created_at = ?;"
-//     connection.query(query, [start], (err, result) => {
-//         if (err) return 'ERROR: ' + err.message;
-//         console.log(result);
-//         // return result;
-//         query_result = result;
-//     });
-//     return query_result;
-// }
-
 
 router.get('/generateReport', authRole('admin'), (req, res) => {
-    // const start = req.header('query_date');
     const start = req.query.date;
     const shop = req.query.shop;
-    // const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE created_at = ? AND shop_owner = ?;";
     connection.query(query, [start, shop], (err, packages) => {
@@ -81,9 +67,7 @@ router.get('/generateReport', authRole('admin'), (req, res) => {
 
 
 router.get('/dailyShopReport', authRole('admin'), (req, res) => {
-    // const date = req.header('query_date');
     const date = req.query.date;
-    // const shop = req.header('shop');
     const shop = req.query.shop;
 
     const query = "SELECT * FROM Packages WHERE delivered_at = ? AND shop_owner = ?;";
@@ -149,9 +133,7 @@ router.get('/dailyShopReport', authRole('admin'), (req, res) => {
 });
 
 router.get('/dailyReport', authRole('admin'), (req, res) => {
-    // const date = req.header('query_date');
     const date = req.query.date;
-    // const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE delivered_at = ?;";
     connection.query(query, [date], (err, packages) => {
@@ -241,7 +223,6 @@ router.post('/register', authRole('admin'), (req, res) => {
                             message: err.message
                         })
                     } else {
-                        // console.log(result);
                         res.status(200).json({
                             message: 'success',
                             shopId: result.insertId
@@ -278,7 +259,6 @@ router.get('/getAllShops', authRole('admin'), (req, res) => {
 });
 
 router.get('/getShopByDate', (req, res) => {
-    // const date = req.header('query_date');
     const date = req.query.date;
     const query = "SELECT DISTINCT shop_owner FROM Packages WHERE delivered_at = ?;";
     connection.query(query, date, (err, result) => {
@@ -301,7 +281,7 @@ router.get('/getShopByDate', (req, res) => {
             }
         }
     })
-})
+});
 
 router.delete('/deleteShop/:shopId', authRole('admin'), (req, res) => {
     const shopId = req.params.shopId;
@@ -321,9 +301,7 @@ router.delete('/deleteShop/:shopId', authRole('admin'), (req, res) => {
 });
 
 router.get('/packageOfShopByDate', (req, res) => {
-    // const date = req.header('query_date');
     const date = req.query.date;
-    // const shop = req.header('shop');
     const shop = req.query.shop;
 
     const query = "SELECT * FROM Packages WHERE shop_owner = ? AND created_at = ?;";
@@ -346,7 +324,7 @@ router.get('/packageOfShopByDate', (req, res) => {
             }
         }
     })
-})
+});
 
 
 module.exports = router;

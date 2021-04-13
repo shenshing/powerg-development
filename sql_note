@@ -97,3 +97,10 @@ DATABASE=powergDEV
 HOST=powerg-dev-database-do-user-9016877-0.b.db.ondigitalocean.com
 DB_PORT=25060
 TOKEN_SECRET = abc
+
+mysql> select * from Packages where delivery_man_name = 'shing' AND created_at between '2021/04/05' and '2021/04/15';
++------------+-----------------+-----------+---------------+------------+-----------+----------------+-------------+-----------------+---------------+---------+-------------------+--------+------------+--------------+
+| package_id | shop_owner      | cust_name | cust_location | cust_phone | pro_price | payment_method | service_fee | service_paid_by | package_price | status  | delivery_man_name | others | created_at | delivered_at |
++------------+-----------------+-----------+---------------+------------+-----------+----------------+-------------+-----------------+---------------+---------+-------------------+--------+------------+--------------+
+|          6 | StoreCollection | sopheak   | TK            | NULL       |        10 | COD            |           1 | Receiver        |            11 | PENDING | shing             | NULL   | 2021/04/13 | NULL         |
++------------+-----------------+-----------+---------------+------------+-----------+----------------+-------------+-----------------+---------------+---------+-------------------+--------+------------+--------------+

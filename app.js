@@ -11,6 +11,7 @@ const dbService = require('./database/dbService');
 const server = require('./routes/server');
 const shopReport = require('./report/shop');
 const packageList = require('./data/packageList');
+const delivery = require('./report/delivery_man');
 
 // const {isAdmin} = require('./routes/validation');
 
@@ -30,10 +31,10 @@ const packageList = require('./data/packageList');
 
 // generateQR('etalket.com');
 // app.use()
-app.use(function(req, res, next) {
-    res.header('date', '*'),
-    next();
-});
+// app.use(function(req, res, next) {
+//     res.header('date', '*'),
+//     next();
+// });
 app.use(cors());
 app.use(express.json());
 app.use('/', server);
@@ -41,8 +42,9 @@ app.use('/api/user', authRoute);
 app.use('/package', Package);
 app.use('/shop', shopReport);
 app.use('/packageList', packageList);
+app.use('/delivery', delivery);
 
 
-app.listen(3001, () => {
+app.listen(3000, () => {
     console.log('Server up and Running');
 });

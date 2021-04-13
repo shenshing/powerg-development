@@ -2,15 +2,30 @@ const connection = require('../database/dbService');
 const path = require('path');
 const QRCode = require('qrcode');
 const router = require('express').Router();
-const calculateCOD  = require('../services/service');
+const {calculateCOD}  = require('../services/service');
 const { get } = require('http');
 const url = require('url');
 const querystring = require('querystring');
 
 router.post('/addPackage', async (req, res) => {
+
+    // var MyDate = new Date();
+
+    // const dateAdded = MyDate.getFullYear() + '/' + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/' + ('0' + MyDate.getDate()).slice(-2);
+
+    // console.log(dateAdded);
+
     const date = new Date();
+    console.log(date.toLocaleString());
     const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
     console.log(dateAdded);
+
+
+    // const month_with = date.get
+    // console.log('utc month ', + month_with);
+    // console.log(dateAdded);
+
+
     const status = 'PENDING';
     const { shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by } = req.body;
     const pack = {
@@ -92,15 +107,11 @@ router.post('/finalUpdate', async(req, res) => {
         connection.query(query, [packageStatus, packageId], (err, result) => {
             if(err) {
                 console.log(`error on package_id[${packageId}] : `+ err.message);
-                // success.push(`id: ${packageId} : unsuccess`);
                 unsuccess.push({
                     errorPackageId: packageId,
                     errorMessage: err.message
                 })
-                // unsuccess.push(packageId);
             } else {
-                // success.push(`id: ${packageId} : success`); 
-                // console.log(result);
                 success.push(packageId);
             }
             if(i === totalIndex - 1) {
@@ -112,16 +123,12 @@ router.post('/finalUpdate', async(req, res) => {
             }
         })
     }
-    // res.status(200).json({
-    //     message: 
-    // })
 });
 
 router.get('/getAllPackageByDate', (req, res) => {
     const date = req.query.date;
     console.log(date);
     const query = `SELECT * FROM Packages WHERE created_at = '${date}';`;
-    // console.log(query);
     connection.query(query,  (err, result) => {
         if(err) {
             console.log(err);
@@ -170,8 +177,6 @@ router.get('/countOnGoingByDate', (req, res) => {
 
 router.get('/countPackageByDate', (req, res) => {
     const date = req.query.date;
-    // console.log(date);
-    // const query = "SELECT * FROM Packages WHERE created_at = ?;";
     const query = `SELECT * FROM Packages WHERE created_at = '${date}'`;
     connection.query(query, date, (err, result) => {
         if(err) {
@@ -199,8 +204,7 @@ router.get('/countPackageByDate', (req, res) => {
 router.get('/countSuccessByDate', (req, res) => {
     const date = req.query.date;
 
-    const query = `SELECT * FROM Packages WHERE created_at = '${date}' AND status = 'SUCCESS';`;
-    // const query = "SELECT * FROM Packages WHERE created_at = ? AND status = 'ON GOING';";
+    const query = `SELECT * FROM Packages WHERE created_at = '${date}';`;
     connection.query(query, (err, result) => {
         if(err) {
             console.log(err);
@@ -211,8 +215,7 @@ router.get('/countSuccessByDate', (req, res) => {
             if(result.length === 0) {
                 res.status(200).json({
                     message: 'no data exist',
-                    total: result.length,
-                    data: result
+                    total: result.length
                 })
             } else {
                 res.status(200).json({
