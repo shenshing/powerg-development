@@ -16,7 +16,9 @@ router.post('/addPackage', async (req, res) => {
     // console.log(dateAdded);
 
     const date = new Date();
-    console.log(date.toLocaleString());
+    // console.log(date.toLocaleString());
+    console.log(date);
+    console.log(date.toLocaleDateString());
     const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
     console.log(dateAdded);
 
