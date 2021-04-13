@@ -16,7 +16,8 @@ const { authRole } = require('../routes/validation');
 
 
 router.get('/generateReport', authRole('admin'), (req, res) => {
-    const start = req.header('query_date');
+    // const start = req.header('query_date');
+    const start = req.query.date;
     const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE created_at = ? AND shop_owner = ?;";
@@ -79,7 +80,8 @@ router.get('/generateReport', authRole('admin'), (req, res) => {
 
 
 router.get('/dailyShopReport', authRole('admin'), (req, res) => {
-    const date = req.header('query_date');
+    // const date = req.header('query_date');
+    const date = req.query.date;
     const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE delivered_at = ? AND shop_owner = ?;";
@@ -145,7 +147,8 @@ router.get('/dailyShopReport', authRole('admin'), (req, res) => {
 });
 
 router.get('/dailyReport', authRole('admin'), (req, res) => {
-    const date = req.header('query_date');
+    // const date = req.header('query_date');
+    const date = req.query.date;
     // const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE delivered_at = ?;";
@@ -273,7 +276,8 @@ router.get('/getAllShops', authRole('admin'), (req, res) => {
 });
 
 router.get('/getShopByDate', (req, res) => {
-    const date = req.header('query_date');
+    // const date = req.header('query_date');
+    const date = req.query.date;
     const query = "SELECT DISTINCT shop_owner FROM Packages WHERE delivered_at = ?;";
     connection.query(query, date, (err, result) => {
         if(err) {
@@ -315,7 +319,8 @@ router.delete('/deleteShop/:shopId', authRole('admin'), (req, res) => {
 });
 
 router.get('/packageOfShopByDate', (req, res) => {
-    const date = req.header('query_date');
+    // const date = req.header('query_date');
+    const date = req.query.date;
     const shop = req.header('shop');
 
     const query = "SELECT * FROM Packages WHERE shop_owner = ? AND created_at = ?;";
