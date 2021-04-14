@@ -14,13 +14,13 @@ router.post('/addPackage', async (req, res) => {
     // const dateAdded = MyDate.getFullYear() + '/' + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/' + ('0' + MyDate.getDate()).slice(-2);
 
     // console.log(dateAdded);
-    const tz = (new Date().getTimezoneOffset());
-    console.log(tz);
+    const tz = new Date();
+    console.log('local ' + tz);
 
     const date = new Date();
     // console.log(date.toLocaleString());
-    console.log(date);
-    console.log(date.toLocaleDateString());
+    // console.log(date);
+    // console.log(date.toLocaleDateString());
     const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
     console.log(dateAdded);
 
@@ -39,7 +39,7 @@ router.post('/addPackage', async (req, res) => {
         service_fee: service_fee
     };
     let package_price = calculateCOD(pack);
-    console.log(package_price);
+    // console.log(package_price);
     try {
         const query = "INSERT INTO Packages(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, package_price, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         connection.query(query, [shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, package_price, status, dateAdded], async (err, result) => {
