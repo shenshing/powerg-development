@@ -105,8 +105,9 @@ router.post('/finalUpdate', async(req, res) => {
         let record = body[i];
         let packageId = record.package_id;
         let packageStatus = record.status;
-        const query = "UPDATE Packages SET status = ? WHERE package_id = ?;";
-        connection.query(query, [packageStatus, packageId], (err, result) => {
+        let others = record.others;
+        const query = "UPDATE Packages SET status = ?, others = ? WHERE package_id = ?;";
+        connection.query(query, [packageStatus, others, packageId], (err, result) => {
             if(err) {
                 console.log(`error on package_id[${packageId}] : `+ err.message);
                 unsuccess.push({
