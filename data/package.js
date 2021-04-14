@@ -14,6 +14,8 @@ router.post('/addPackage', async (req, res) => {
     // const dateAdded = MyDate.getFullYear() + '/' + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/' + ('0' + MyDate.getDate()).slice(-2);
 
     // console.log(dateAdded);
+    const tz = (new Date().getTimezoneOffset());
+    console.log(tz);
 
     const date = new Date();
     // console.log(date.toLocaleString());
