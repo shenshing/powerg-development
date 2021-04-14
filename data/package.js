@@ -22,7 +22,7 @@ router.post('/addPackage', async (req, res) => {
     // console.log(date);
     // console.log(date.toLocaleDateString());
     const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
-    console.log(dateAdded);
+    console.log('date added ' + dateAdded);
 
 
     // const month_with = date.get
