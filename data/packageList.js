@@ -5,6 +5,7 @@ const connection = require('../database/dbService');
 const { route } = require('./package');
 const router = require('express').Router();
 const { authRole } = require('../routes/validation');
+const {responseforDeliveryList}  = require('../services/service');
 
 
 router.post('/addList', async(req, res) => {
@@ -175,19 +176,21 @@ router.get('/getListById/:listId', async(req, res) => {
             })
         } else {
             const idData = result[0].packages.split(',');
-                const query = "SELECT * FROM Packages WHERE package_id in (?)";
-                connection.query(query, [idData], (err, result) => {
-                    if(err) {
-                        console.log("ERROR: " + err.message);
-                        res.status(404).json({
-                            message: err.message,
-                        });
-                    } else {
-                        return res.status(200).json({
-                            data: result
-                        })
-                    }
-                })
+            const query = "SELECT * FROM Packages WHERE package_id in (?)";
+            connection.query(query, [idData], (err, result) => {
+                if(err) {
+                    console.log("ERROR: " + err.message);
+                    res.status(404).json({
+                        message: err.message,
+                    });
+                } else {
+                    // responseforDeliveryList(result);
+                    return res.status(200).json({
+                        // data: result
+                        data: responseforDeliveryList(result)
+                    })
+                }
+            })
         }
     })
     
