@@ -10,7 +10,7 @@
             return -package.service_fee;
         }
         if (package.payment_method === 'Paid' && package.service_paid_by === 'Receiver') {
-            return package.service_fee;
+            return 0;
         }
         return 0;
     },
