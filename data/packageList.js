@@ -186,22 +186,9 @@ router.get('/getListById/:listId', async(req, res) => {
                 } else {
                     let response = [];
                     packages.forEach(package => {
-                        if(package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
-                            package.service_fee = 0;
-                            response.push(packages);
-                        } else if(package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
-                            response.push(package);
-                        } else if(package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
-                            package.service_fee = 0;
-                            package.pro_price;
-                            response.push(package);
-                        } else { //(package.payment_method === 'Paid', && package.service_paid_by === 'Receiver')
-                            package.pro_price = 0;
-                            response.push(package);
-                        }
+                        response.push(responseforDeliveryList(package));
                     })
                     return res.status(200).json({
-                        // data: result
                         data: response
                     })
                 }
