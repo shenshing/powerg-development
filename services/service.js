@@ -4,7 +4,7 @@
             return package.pro_price;
         }
         if (package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
-            return package.pro_price + package.service_fee;
+            return parseFloat(package.pro_price) + parseFloat(package.service_fee);
         }
         if (package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
             return 0;
