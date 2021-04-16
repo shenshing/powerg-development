@@ -1,7 +1,7 @@
 
     exports.calculateCOD = function(package) {
         if (package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
-            return package.pro_price;
+            return package.pro_price - package.service_fee;
         }
         if (package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
             return parseFloat(package.pro_price) + parseFloat(package.service_fee);
