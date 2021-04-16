@@ -7,7 +7,8 @@
             return package.pro_price + package.service_fee;
         }
         if (package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
-            return 0;
+            // return 0;
+            return -package.service_fee;
         }
         if (package.payment_method === 'Paid' && package.service_paid_by === 'Receiver') {
             return package.service_fee;

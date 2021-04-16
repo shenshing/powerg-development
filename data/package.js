@@ -39,12 +39,12 @@ router.post('/addPackage', async (req, res) => {
         service_fee: service_fee
     };
     let package_price = calculateCOD(pack);
-    // console.log(package_price);
+    console.log(package_price);
     try {
         const query = "INSERT INTO Packages(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, package_price, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         connection.query(query, [shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, package_price, status, dateAdded], async (err, result) => {
             if (err) {
-                console.log(err);
+                console.log(err.message);
                 res.status(404).json({
                     message: 'Something went wrong in our End'
                 })
