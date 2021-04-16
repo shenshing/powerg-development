@@ -92,19 +92,11 @@
 // }
 // module.exports = codForReport;
 
-exports.responseforDeliveryList = function(packages) {
+exports.responseforDeliveryList = function(packages, response) {
     // console.log(packages[0]);
-    let response = [];
+    // let response = [];
     packages.forEach(package => {
         if(package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
-            // const struct = {
-            //     cust_name: package.cust_name,
-            //     cust_location: package.cust_location,
-            //     cust_phone: package.cust_phone,
-            //     service_fee: package.service_fee,
-            //     pro_price: package.pro_price,
-            //     payment_method: package.
-            // };
             package.service_fee = 0;
             response.push(packages);
         } else if(package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
@@ -117,7 +109,5 @@ exports.responseforDeliveryList = function(packages) {
             package.pro_price = 0;
             response.push(package);
         }
-        // console.log(response);
-        return response;
     })
 }

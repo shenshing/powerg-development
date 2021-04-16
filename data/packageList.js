@@ -177,17 +177,32 @@ router.get('/getListById/:listId', async(req, res) => {
         } else {
             const idData = result[0].packages.split(',');
             const query = "SELECT * FROM Packages WHERE package_id in (?)";
-            connection.query(query, [idData], (err, result) => {
+            connection.query(query, [idData], (err, packages) => {
                 if(err) {
                     console.log("ERROR: " + err.message);
                     res.status(404).json({
                         message: err.message,
                     });
                 } else {
-                    // responseforDeliveryList(result);
+                    let response = [];
+                    packages.forEach(package => {
+                        if(package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
+                            package.service_fee = 0;
+                            response.push(packages);
+                        } else if(package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
+                            response.push(package);
+                        } else if(package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
+                            package.service_fee = 0;
+                            package.pro_price;
+                            response.push(package);
+                        } else { //(package.payment_method === 'Paid', && package.service_paid_by === 'Receiver')
+                            package.pro_price = 0;
+                            response.push(package);
+                        }
+                    })
                     return res.status(200).json({
                         // data: result
-                        data: responseforDeliveryList(result)
+                        data: response
                     })
                 }
             })
