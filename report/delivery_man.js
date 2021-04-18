@@ -29,7 +29,7 @@ router.get('/commission', (req, res) => {
                 const count = countPackage(result);
                 res.status(200).json({
                     message: 'ok',
-                    totalAmount: count.total_success * 1000,
+                    totalAmount: count.total_success * 0.2,
                     report: count,
                     data: result
                 })
