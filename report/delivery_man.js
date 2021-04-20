@@ -14,7 +14,7 @@ router.get('/commission', (req, res) => {
     console.log('end ' + end);
 
     // const query = `SELECT * FROM Packages WHERE delivery_man_name = '${name}' AND status = 'SUCCESS' AND created_at BETWEEN '${start}' AND '${end}';`;
-    const query = `SELECT * FROM Packages WHERE delivery_man_name = '${name}' AND status = 'SUCCESS' AND STR_TO_DATE(created_at, '%Y/%m/%d') BETWEEN '${start}' AND '${end}';`;
+    const query = `SELECT * FROM Packages WHERE delivery_man_name = '${name}' AND STR_TO_DATE(created_at, '%Y/%m/%d') BETWEEN '${start}' AND '${end}';`;
     console.log(query);
     connection.query(query, (err, result) => {
         if(err) {
