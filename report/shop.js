@@ -85,10 +85,6 @@ router.get('/dailyShopReport', authRole('admin'), (req, res) => {
         let total_success = 0;
         let total_unsuccess = 0;
         let total_ongoing = 0;
-        let case1 = 0;
-        let case2 = 0;
-        let case3 = 0;
-        let case4 = 0;
         let shop_get;
 
         packages.forEach(package => {
@@ -97,22 +93,18 @@ router.get('/dailyShopReport', authRole('admin'), (req, res) => {
                 if (package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
                     shop_get = package.pro_price - package.service_fee;
                     total_amount = total_amount + shop_get;
-                    case1 = case1 + 1;
                 }
                 if (package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
                     shop_get = package.pro_price;
                     total_amount = total_amount + shop_get;
-                    case2 = case2 + 1;
                 }
                 if (package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
                     shop_get = -package.service_fee;
                     total_amount = total_amount + shop_get;
-                    case3 = case3 + 1;
                 }
                 if (package.payment_method === 'Paid' && package.service_paid_by === 'Receiver') {
                     shop_get = 0;
                     total_amount = total_amount + shop_get;
-                    case4 = case4 + 1;
                 }
             } else if(package.status === 'ON GOING') {
                 total_ongoing = total_ongoing + 1;
@@ -150,10 +142,6 @@ router.get('/dailyReport', authRole('admin'), (req, res) => {
         let total_success = 0;
         let total_unsuccess = 0;
         let total_ongoing = 0;
-        let case1 = 0;
-        let case2 = 0;
-        let case3 = 0;
-        let case4 = 0;
         let shop_get;
 
         packages.forEach(package => {
@@ -162,22 +150,18 @@ router.get('/dailyReport', authRole('admin'), (req, res) => {
                 if (package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
                     shop_get = package.pro_price - package.service_fee;
                     total_amount = total_amount + shop_get;
-                    case1 = case1 + 1;
                 }
                 if (package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
                     shop_get = package.pro_price;
                     total_amount = total_amount + shop_get;
-                    case2 = case2 + 1;
                 }
                 if (package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
                     shop_get = -package.service_fee;
                     total_amount = total_amount + shop_get;
-                    case3 = case3 + 1;
                 }
                 if (package.payment_method === 'Paid' && package.service_paid_by === 'Receiver') {
                     shop_get = 0;
                     total_amount = total_amount + shop_get;
-                    case4 = case4 + 1;
                 }
             } else if(package.status === 'ON GOING') {
                 total_ongoing = total_ongoing + 1;
