@@ -274,6 +274,6 @@ router.delete('/deletePackageById/:id', (req, res) => {
             })
         }
     })
-})
+});
 
 module.exports = router;

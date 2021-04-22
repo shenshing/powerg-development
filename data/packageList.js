@@ -1,8 +1,6 @@
 const { response } = require('express');
 const e = require('express');
-const { rawListeners } = require('../database/dbService');
 const connection = require('../database/dbService');
-const { route } = require('./package');
 const router = require('express').Router();
 const { authRole } = require('../routes/validation');
 const {responseforDeliveryList}  = require('../services/service');
@@ -197,6 +195,7 @@ router.get('/getListById/:listId', async(req, res) => {
     
 });
 
+router.get('/getList')
 router.get('/getAllLists', authRole('admin'), (req, res) => {
     const query = "SELECT * FROM PackageLists;"
     connection.query(query, (err, result) => {
@@ -232,6 +231,36 @@ router.delete('/deleteListById/:listId', authRole('admin'), (req, res) => {
         }
     })
 });
+
+router.get('/getListByDateId', (req, res) => {
+    const date = req.query.date;
+    // const end = req.query.end;
+    const del_id = req.query.id;
+    const del_name = req.query.name;
+
+    const query = `SELECT * FROM PackageLists WHERE created_at = '${date}' AND deliveryManId = ${del_id} AND deliveryManName = '${del_name}' AND submitted = false`;
+    connection.query(query, (err, result) => {
+        if(err) {
+            console.log(err);
+            return res.status(404).json({
+                message: err.message
+            })
+        } else {
+            if(result.length === 0) {
+                res.status(404).json({
+                    message: 'no data exist'
+                })
+            } else {
+                res.status(200).json({
+                    message: 'ok',
+                    data: result
+                })
+            }
+        }
+    })
+})
+
+
 
 function isListIdExist(id) {
     return new Promise(function(resolve, reject) {
