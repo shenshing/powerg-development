@@ -239,6 +239,7 @@ router.get('/getListByDateId', (req, res) => {
     const del_name = req.query.name;
 
     const query = `SELECT * FROM PackageLists WHERE created_at = ${date} AND deliveryManId = ${del_id} AND deliveryManName = '${del_name}' AND submitted = false`;
+    console.log(query);
     connection.query(query, (err, result) => {
         if(err) {
             console.log(err);
@@ -247,7 +248,7 @@ router.get('/getListByDateId', (req, res) => {
             })
         } else {
             if(result.length === 0) {
-                res.status(404).json({
+                res.status(200).json({
                     message: 'no data exist'
                 })
             } else {
