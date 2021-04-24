@@ -97,7 +97,7 @@ router.get('/getAllPackage', async (req, res) => {
 });
 
 router.post('/finalUpdate', async(req, res) => {
-    const body = req.body;
+    const {listId, data} = req.body;
     // console.log("listId : " + listId);
     // console.log("body : " + body);
 
@@ -108,13 +108,15 @@ router.post('/finalUpdate', async(req, res) => {
     // console.log('data: ' + data);
     // console.log("listId : " + listId);
     // console.log("body : " + body);
+    console.log('listId : ' + listId);
+    console.log('data : ' + data);
 
-    const totalIndex = body.length;
+    const totalIndex = data.length;
     var success = [];
     var unsuccess = [];
 
     for(let i = 0; i<totalIndex; i++) {
-        let record = body[i];
+        let record = data[i];
         let packageId = record.package_id;
         let packageStatus = record.status;
         let others = record.others;
