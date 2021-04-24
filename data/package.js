@@ -98,16 +98,6 @@ router.get('/getAllPackage', async (req, res) => {
 
 router.post('/finalUpdate', async(req, res) => {
     const {listId, data} = req.body;
-    // console.log("listId : " + listId);
-    // console.log("body : " + body);
-
-    // const data = req.body;
-    // const body = data.body;
-    // const listId = data.listId;
-
-    // console.log('data: ' + data);
-    // console.log("listId : " + listId);
-    // console.log("body : " + body);
     console.log('listId : ' + listId);
     console.log('data : ' + data);
 
@@ -120,8 +110,8 @@ router.post('/finalUpdate', async(req, res) => {
         let packageId = record.package_id;
         let packageStatus = record.status;
         let others = record.others;
-        const query = "UPDATE Packages SET status = ?, others = ? WHERE package_id = ?;";
-        connection.query(query, [packageStatus, others, packageId], (err, result) => {
+        const query = `UPDATE Packages SET status = '${packageStatus}', others = '${others}' WHERE package_id = ${packageId};`;
+        connection.query(query, (err, result) => {
             if(err) {
                 console.log(`error on package_id[${packageId}] : `+ err.message);
                 unsuccess.push({
@@ -132,30 +122,41 @@ router.post('/finalUpdate', async(req, res) => {
                 success.push(packageId);
             }
             if(i === totalIndex - 1) {
-                // const query = `UPDATE PackageLists SET submitted = 'true' WHERE listId = ${listId};`;
-                // connection.query(query, (err, result) => {
-                //     if(err) {
-                //         console.log(err);
-                //         res.status(404).json({
-                //             message: err.message
-                //         })
-                //     } else {
-                //         res.status(200).json({
-                //             message: 'successful update',
-                //             success: success,
-                //             unsuccess: unsuccess
-                //         })
-                //     // }
-                // })
-                res.status(200).json({
-                    message: 'successful update',
-                    success: success,
-                    unsuccess: unsuccess
+                const query = `UPDATE PackageLists SET submitted = true WHERE listId = ${listId};`;
+                connection.query(query, (err, result) => {
+                    if(err) {
+                        console.log(err);
+                        res.status(404).json({
+                            message: err.message
+                        })
+                    } else {
+                        res.status(200).json({
+                            message: 'successful update',
+                            success: success,
+                            unsuccess: unsuccess
+                        })
+                    }
                 })
             }
         })
-    }
+    }    
 });
+
+// const query = `UPDATE PackageLists SET submitted = 'true' WHERE listId = ${listId};`;
+//                 connection.query(query, (err, result) => {
+//                     if(err) {
+//                         console.log(err);
+//                         res.status(404).json({
+//                             message: err.message
+//                         })
+//                     } else {
+//                         res.status(200).json({
+//                             message: 'successful update',
+//                             success: success,
+//                             unsuccess: unsuccess
+//                         })
+//                     }
+//         })
 
 router.get('/getAllPackageByDate', (req, res) => {
     const date = req.query.date;
