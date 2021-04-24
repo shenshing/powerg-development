@@ -97,7 +97,15 @@ router.get('/getAllPackage', async (req, res) => {
 });
 
 router.post('/finalUpdate', async(req, res) => {
-    const {listId, body} = req.body;
+    // const {listId, body} = req.body;
+    // console.log("listId : " + listId);
+    // console.log("body : " + body);
+
+    const data = req.body;
+    const body = data.body;
+    const listId = data.listId;
+
+    console.log('data: ' + data);
     console.log("listId : " + listId);
     console.log("body : " + body);
 
