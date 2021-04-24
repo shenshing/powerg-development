@@ -99,7 +99,7 @@ router.get('/getAllPackage', async (req, res) => {
 router.post('/finalUpdate', async(req, res) => {
     const body = req.body;
     // console.log("listId : " + listId);
-    console.log("body : " + body);
+    // console.log("body : " + body);
 
     // const data = req.body;
     // const body = data.body;
@@ -130,7 +130,7 @@ router.post('/finalUpdate', async(req, res) => {
                 success.push(packageId);
             }
             if(i === totalIndex - 1) {
-                const query = `UPDATE PackageLists SET submitted = 'true' WHERE listId = ${listId};`;
+                // const query = `UPDATE PackageLists SET submitted = 'true' WHERE listId = ${listId};`;
                 // connection.query(query, (err, result) => {
                 //     if(err) {
                 //         console.log(err);
