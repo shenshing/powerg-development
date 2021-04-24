@@ -238,7 +238,7 @@ router.get('/getListByDateId', (req, res) => {
     const del_id = req.query.id;
     const del_name = req.query.name;
 
-    const query = `SELECT * FROM PackageLists WHERE created_at = ${date} AND deliveryManId = ${del_id} AND deliveryManName = '${del_name}' AND submitted = false`;
+    const query = `SELECT * FROM PackageLists WHERE created_at = '${date}' AND deliveryManId = ${del_id} AND deliveryManName = '${del_name}' AND submitted = false`;
     console.log(query);
     connection.query(query, (err, result) => {
         if(err) {
