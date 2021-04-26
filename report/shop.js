@@ -242,7 +242,7 @@ router.get('/getAllShops', authRole('admin'), (req, res) => {
     })
 });
 
-router.get('/getShopByDate', (req, res) => {
+router.get('/getShopByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
     const query = "SELECT DISTINCT shop_owner FROM Packages WHERE delivered_at = ?;";
     connection.query(query, date, (err, result) => {
@@ -284,7 +284,7 @@ router.delete('/deleteShop/:shopId', authRole('admin'), (req, res) => {
     })
 });
 
-router.get('/packageOfShopByDate', (req, res) => {
+router.get('/packageOfShopByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
     const shop = req.query.shop;
 

@@ -3,8 +3,10 @@ const connection = require('../database/dbService');
 const router = require('express').Router();
 const {countPackage} = require('../services/service');
 
+const { authRole } = require('../routes/validation');
 
-router.get('/commission', (req, res) => {
+
+router.get('/commission', authRole('admin'), (req, res) => {
 
     const start = req.query.start;
     const end = req.query.end;

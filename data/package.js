@@ -7,7 +7,9 @@ const { get } = require('http');
 const url = require('url');
 const querystring = require('querystring');
 
-router.post('/addPackage', async (req, res) => {
+const { authRole } = require('../routes/validation');
+
+router.post('/addPackage', authRole('admin'), async (req, res) => {
 
     // var MyDate = new Date();
 
@@ -74,7 +76,7 @@ router.post('/addPackage', async (req, res) => {
 });
 
 
-router.get('/getAllPackage', async (req, res) => {
+router.get('/getAllPackage', authRole('admin'), async (req, res) => {
     try {
         const query = "SELECT * FROM Packages;";
         connection.query(query, async (err, result) => {
@@ -158,7 +160,7 @@ router.post('/finalUpdate', async(req, res) => {
 //                     }
 //         })
 
-router.get('/getAllPackageByDate', (req, res) => {
+router.get('/getAllPackageByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
     console.log(date);
     const query = `SELECT * FROM Packages WHERE created_at = '${date}';`;
@@ -183,14 +185,14 @@ router.get('/getAllPackageByDate', (req, res) => {
     })
 });
 
-router.get('/countOnGoingByDate', (req, res) => {
+router.get('/countOnGoingByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
     const query = `SELECT * FROM Packages WHERE created_at = '${date}' AND status = 'ON GOING';`;
     connection.query(query, (err, result) => {
         if(err) {
             console.log(err);
             res.status(404).json({
-                message: 'Something went wrong in our End'
+                message: err.message
             })
         } else {
             if(result.length < 0) {
@@ -208,15 +210,16 @@ router.get('/countOnGoingByDate', (req, res) => {
     })
 });
 
-router.get('/countPackageByDate', (req, res) => {
+router.get('/countPackageByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
     const query = `SELECT * FROM Packages WHERE created_at = '${date}'`;
     connection.query(query, date, (err, result) => {
         if(err) {
             console.log(err);
             res.status(404).json({
-                message: 'Something went wrong in our End',
-                technicalError: err.message
+                // message: 'Something went wrong in our End',
+                // technicalError: err.message
+                message: err.message
             })
         } else {
             if(result.length < 0) {
@@ -234,7 +237,7 @@ router.get('/countPackageByDate', (req, res) => {
     })
 });
 
-router.get('/countSuccessByDate', (req, res) => {
+router.get('/countSuccessByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
 
     const query = `SELECT * FROM Packages WHERE created_at = '${date}';`;
@@ -242,7 +245,7 @@ router.get('/countSuccessByDate', (req, res) => {
         if(err) {
             console.log(err);
             res.status(404).json({
-                message: 'Something went wrong in our End'
+                message: err.message
             })
         } else {
             if(result.length === 0) {
@@ -261,14 +264,14 @@ router.get('/countSuccessByDate', (req, res) => {
     })
 });
 
-router.get('/countUnSuccessByDate', (req, res) => {
+router.get('/countUnSuccessByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
     const query = `SELECT * FROM Packages WHERE created_at = '${date}' AND status = 'UNSUCCESS';`;
     connection.query(query, (err, result) => {
         if(err) {
             console.log(err);
             res.status(404).json({
-                message: 'Something went wrong in our End'
+                message: err.message
             })
         } else {
             if(result.length < 0) {
@@ -287,14 +290,14 @@ router.get('/countUnSuccessByDate', (req, res) => {
 });
 
 
-router.delete('/deletePackageById/:id', (req, res) => {
+router.delete('/deletePackageById/:id', authRole('admin'), (req, res) => {
     const id = parseInt(req.params.id);
     const query = "DELETE FROM Packages WHERE package_id = ?;";
     connection.query(query, id, (err, result)=> {
         if(err) {
             console.log(err);
             res.status(404).json({
-                message: 'Something went wrong in our End'
+                message: err.message
             })
         } else {
             res.status(200).json({

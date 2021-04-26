@@ -195,7 +195,6 @@ router.get('/getListById/:listId', async(req, res) => {
     
 });
 
-router.get('/getList')
 router.get('/getAllLists', authRole('admin'), (req, res) => {
     const query = "SELECT * FROM PackageLists;"
     connection.query(query, (err, result) => {

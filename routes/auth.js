@@ -98,7 +98,7 @@ router.post('/login', async(req, res) => {
 
 });
 
-router.get('/getuserbyid/:id', async(req, res) => {
+router.get('/getuserbyid/:id', authRole('admin'), async(req, res) => {
     const id = req.params.id;
     const query = ("SELECT * FROM Users WHERE user_id=?;");
     connection.query(query, [id], (err, user) => {
