@@ -22,16 +22,20 @@ router.post('/register', async(req, res) => {
     const { name, password, contact } = req.body;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-                        
-    try {
-        const dateAdded = new Date();
-        const user_role = 'user';
-        const query = ('SELECT user_name FROM Users WHERE user_name=?;');
-        connection.query(query, [name], (err, result) => {
-            if (err) {
-                console.log(err.message);
-                res.status(404).json({
-                    message: 'Something went wrong in our End'
+           
+    const dateAdded = new Date();
+    const user_role = 'user';
+    const query = ('SELECT user_name FROM Users WHERE user_name=?;');
+    connection.query(query, [name], (err, result) => {
+        if (err) {
+            console.log(err.message);
+            res.status(404).json({
+                message: 'Something went wrong in our End'
+            })
+        } else {
+            if(result.length > 0) {
+                res.status(400).json({
+                    message: 'Name already in use'
                 })
             } else {
                 if(result.length > 0) {
@@ -54,10 +58,9 @@ router.post('/register', async(req, res) => {
                     })
                 }
             }
-        });
-    } catch (error) {
-        console.log(error);
-    }
+        }
+    });
+    
 });
 
 
@@ -142,7 +145,6 @@ router.delete('/deleteuserbyid/:id', authRole('admin'), async(req, res) => {
     const id = req.params.id;
     const query = ("DELETE FROM Users where user_id=? AND role='user';");
     connection.query(query, [id], (err, result) => {
-        // console.log(result);
         if (err) {
             console.log("ERROR: " + err.message);
             res.status(500).json({

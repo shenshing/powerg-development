@@ -9,7 +9,7 @@ const authRoute = require('./routes/auth');
 const Package = require('./data/package');
 const dbService = require('./database/dbService');
 const server = require('./routes/server');
-const shopReport = require('./report/shop');
+const shopReport = require('./data/shop');
 const packageList = require('./data/packageList');
 const delivery = require('./report/delivery_man');
 

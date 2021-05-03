@@ -1,6 +1,5 @@
 const connection = require('../database/dbService');
 const path = require('path');
-const QRCode = require('qrcode');
 const router = require('express').Router();
 const {calculateCOD}  = require('../services/service');
 const { get } = require('http');

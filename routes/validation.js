@@ -4,7 +4,6 @@ const jwt  = require('jsonwebtoken');
 const registerValidation = data => {
     const schema = Joi.object({
         name: Joi.string().min(6).required(),
-        // email: Joi.string().min(6).email(),
         password:   Joi.string().min(6).required(),
         contact: Joi.string().min(9).required()
     });
@@ -29,21 +28,14 @@ const isAdmin = token => {
             message: error.message
         }
     }
-    
-    // return true;
-    // console.log(result)
-
 };
 
 function authRole(role) {
-    
-    // console.log(token);
     return (req, res, next) => {
         let token = req.header('auth-token');
         try {
             let result = jwt.verify(token, process.env.TOKEN_SECRET);
             if(result.role !== role) {
-                // return res.status(401).send('Not Allowed');
                 return res.status(401).json({
                     message: 'Not Allowed'
                 })
@@ -54,13 +46,6 @@ function authRole(role) {
                 message: error.message
             })
         }
-
-        
-        // if (req.user.role)
-        // const token = req.header('auth-token');
-        // console.log(token);
-        // res.status(200).send('Allowed');
-        // next()
     }
 }
 
