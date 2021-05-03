@@ -10,28 +10,11 @@ const querystring = require('querystring');
 const { authRole } = require('../routes/validation');
 
 router.post('/addPackage', authRole('admin'), async (req, res) => {
-
-    // var MyDate = new Date();
-
-    // const dateAdded = MyDate.getFullYear() + '/' + ('0' + (MyDate.getMonth()+1)).slice(-2) + '/' + ('0' + MyDate.getDate()).slice(-2);
-
-    // console.log(dateAdded);
     const tz = new Date();
     console.log('local ' + tz);
-
     const date = new Date();
-    // console.log(date.toLocaleString());
-    // console.log(date);
-    // console.log(date.toLocaleDateString());
     const dateAdded = date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate();
     console.log('date added ' + dateAdded);
-
-
-    // const month_with = date.get
-    // console.log('utc month ', + month_with);
-    // console.log(dateAdded);
-
-
     const status = 'PENDING';
     const { shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by } = req.body;
     const pack = {
@@ -144,22 +127,6 @@ router.post('/finalUpdate', async(req, res) => {
     }    
 });
 
-// const query = `UPDATE PackageLists SET submitted = 'true' WHERE listId = ${listId};`;
-//                 connection.query(query, (err, result) => {
-//                     if(err) {
-//                         console.log(err);
-//                         res.status(404).json({
-//                             message: err.message
-//                         })
-//                     } else {
-//                         res.status(200).json({
-//                             message: 'successful update',
-//                             success: success,
-//                             unsuccess: unsuccess
-//                         })
-//                     }
-//         })
-
 router.get('/getAllPackageByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
     console.log(date);
@@ -217,8 +184,6 @@ router.get('/countPackageByDate', authRole('admin'), (req, res) => {
         if(err) {
             console.log(err);
             res.status(404).json({
-                // message: 'Something went wrong in our End',
-                // technicalError: err.message
                 message: err.message
             })
         } else {

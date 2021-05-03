@@ -15,7 +15,6 @@ router.get('/commission', authRole('admin'), (req, res) => {
     console.log('start: ' + start);
     console.log('end ' + end);
 
-    // const query = `SELECT * FROM Packages WHERE delivery_man_name = '${name}' AND status = 'SUCCESS' AND created_at BETWEEN '${start}' AND '${end}';`;
     const query = `SELECT * FROM Packages WHERE delivery_man_name = '${name}' AND STR_TO_DATE(created_at, '%Y/%m/%d') BETWEEN '${start}' AND '${end}';`;
     console.log(query);
     connection.query(query, (err, result) => {
@@ -31,7 +30,6 @@ router.get('/commission', authRole('admin'), (req, res) => {
                     message: 'no data exist'
                 })
             } else {
-                // console.log(countPackage(result));
                 const count = countPackage(result);
                 res.status(200).json({
                     message: 'ok',
@@ -42,17 +40,6 @@ router.get('/commission', authRole('admin'), (req, res) => {
             }
         }
     })
-    // const date = '2021/4/11';
-    // const date_type = new Date(date).toLocaleDateString();
-    // console.log(date_type);
-
-    // res.status(200).json({
-    //     message: 'ok'
-    // })
 });
-
-
-// select *from yourTableName where STR_TO_DATE(LEFT(yourColumnName,LOCATE('',yourColumnName)),'%m/%d/%Y') BETWEEN 'yourDateValue1' AND 'yourDateValue2’;
-
 
 module.exports = router;

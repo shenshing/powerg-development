@@ -165,7 +165,6 @@ router.get('/getListById/:listId', async(req, res) => {
     const delivery_man_id = parseInt(req.params.user);
     const query = "SELECT * FROM PackageLists WHERE listId = ?;";
     connection.query(query, [id, delivery_man_id], (err, result) => {
-        // var array = [];
         if(err) {
             console.log(err);
             return res.status(404).json({
@@ -233,7 +232,6 @@ router.delete('/deleteListById/:listId', authRole('admin'), (req, res) => {
 
 router.get('/getListByDateId', (req, res) => {
     const date = req.query.date;
-    // const end = req.query.end;
     const del_id = req.query.id;
     const del_name = req.query.name;
 
@@ -266,9 +264,6 @@ function isListIdExist(id) {
     return new Promise(function(resolve, reject) {
         const query = "SELECT * FROM PackageLists WHERE listId = ?;";
         connection.query(query, id, (err, result) => {
-            // console.log('length: ' + result.length);
-            // console.log('result data ' + result[0]);
-            // console.log('-----------');
             if(err) {
                 resolve(false);
             }
@@ -286,17 +281,12 @@ function isPackageExist(id) {
         const query = `SELECT * FROM Packages Where package_id = ${id};`;
         console.log(query);
         connection.query(query, (err, result) => {
-            // console.log(result);
             if(err) {
-                // console.log('a');
                 resolve(false);
             }
-            // console.log(result.length);
             if(result.length > 0) {
-            //     console.log('b');
                 resolve(true);
             } else {
-                // console.log('c');
                 resolve(false);
             }
         })
