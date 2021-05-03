@@ -4,11 +4,9 @@ Powerg Dev:
           CREATE TABLE Users(user_id bigint auto_increment primary key, user_name varchar(30), user_password varchar(1024), contact varchar(20), role varchar(10), created_at datetime);
 
       -Packages
-          create table Packages(package_id bigint auto_increment primary key, shop_owner varchar(30), cust_name varchar(30), cust_location varchar(30), cust_phone varchar(15), pro_price double, payment_method varchar(10), service_fee double, service_paid_by varchar(30), status varchar(15), created_at varchar(20));
-
+          create table Packages(package_id bigint auto_increment primary key, shop_owner varchar(30), cust_name varchar(30), cust_location varchar(30), cust_phone varchar(15), pro_price double, payment_method varchar(10), service_fee double, service_paid_by varchar(30), package_price double, status varchar(15), delivery_man_name varchar(30), others varchar(1000), created_at varchar(20), delivered_at varchar(20));-PackageLists
       -PackageLists
-          create table PackageLists(id bigint auto_increment primary key, listId bigint NOT NULL, packages varchar(255),total double NOT NULL, deliveryManId bigint, created_at varchar(50));
-
+          create table PackageLists(id bigint auto_increment primary key, listId bigint NOT NULL, packages varchar(255),total double NOT NULL, deliveryManId bigint, deliveryManName varchar(30), submitted tinyint, created_at varchar(50));
       -Shops
           create table Shops(id bigint auto_increment primary key, shopName varchar(100) NOT NULL, shopContact varchar(20) NOT NULL, shopAddress varchar(255), ownerName varchar(100), ownerContact varchar(20), ownerAddress varchar(255), createdAt varchar(20));
 
@@ -34,33 +32,39 @@ Table User: Users
 
 
 Table Package: Packages
-+-----------------+-------------+------+-----+---------+----------------+
-| Field           | Type        | Null | Key | Default | Extra          |
-+-----------------+-------------+------+-----+---------+----------------+
-| package_id      | bigint      | NO   | PRI | NULL    | auto_increment |
-| shop_owner      | varchar(30) | YES  |     | NULL    |                |
-| cust_name       | varchar(30) | YES  |     | NULL    |                |
-| cust_location   | varchar(30) | YES  |     | NULL    |                |
-| cust_phone      | varchar(15) | YES  |     | NULL    |                |
-| pro_price       | double      | YES  |     | NULL    |                |
-| payment_method  | varchar(10) | YES  |     | NULL    |                |
-| service_fee     | double      | YES  |     | NULL    |                |
-| service_paid_by | varchar(30) | YES  |     | NULL    |                |
-| status          | varchar(15) | YES  |     | NULL    |                |
-| created_at      | varchar(20) | YES  |     | NULL    |                |
-+-----------------+-------------+------+-----+---------+----------------+
++-------------------+---------------+------+-----+---------+----------------+
+| Field             | Type          | Null | Key | Default | Extra          |
++-------------------+---------------+------+-----+---------+----------------+
+| package_id        | bigint        | NO   | PRI | NULL    | auto_increment |
+| shop_owner        | varchar(30)   | YES  |     | NULL    |                |
+| cust_name         | varchar(30)   | YES  |     | NULL    |                |
+| cust_location     | varchar(30)   | YES  |     | NULL    |                |
+| cust_phone        | varchar(15)   | YES  |     | NULL    |                |
+| pro_price         | double        | YES  |     | NULL    |                |
+| payment_method    | varchar(10)   | YES  |     | NULL    |                |
+| service_fee       | double        | YES  |     | NULL    |                |
+| service_paid_by   | varchar(30)   | YES  |     | NULL    |                |
+| package_price     | double        | YES  |     | NULL    |                |
+| status            | varchar(15)   | YES  |     | NULL    |                |
+| delivery_man_name | varchar(30)   | YES  |     | NULL    |                |
+| others            | varchar(1000) | YES  |     | NULL    |                |
+| created_at        | varchar(20)   | YES  |     | NULL    |                |
+| delivered_at      | varchar(20)   | YES  |     | NULL    |                |
++-------------------+---------------+------+-----+---------+----------------+
 
 
 Table PackageList: PackageLists
-+---------------+--------------+------+-----+---------+----------------+
-| Field         | Type         | Null | Key | Default | Extra          |
-+---------------+--------------+------+-----+---------+----------------+
-| listId        | bigint       | NO   | PRI | NULL    | auto_increment |
-| packages      | varchar(255) | NO   |     | NULL    |                |
-| total         | double       | YES  |     | 0       |                |
-| deliveryManId | varchar(10)  | YES  |     | NULL    |                |
-| created_at    | varchar(20)  | YES  |     | NULL    |                |
-+---------------+--------------+------+-----+---------+----------------+
++-----------------+--------------+------+-----+---------+----------------+
+| Field           | Type         | Null | Key | Default | Extra          |
++-----------------+--------------+------+-----+---------+----------------+
+| id              | bigint       | NO   | PRI | NULL    | auto_increment |
+| listId          | bigint       | NO   |     | NULL    |                |
+| packages        | varchar(255) | YES  |     | NULL    |                |
+| total           | double       | NO   |     | NULL    |                |
+| deliveryManId   | bigint       | YES  |     | NULL    |                |
+| deliveryManName | varchar(30)  | YES  |     | NULL    |                |
+| created_at      | varchar(50)  | YES  |     | NULL    |                |
++-----------------+--------------+------+-----+---------+----------------+
 
 
 Table Shops: Shops
@@ -86,3 +90,17 @@ DATABASE=powergDEV
 HOST=localhost
 DB_PORT=3306
 TOKEN_SECRET = abc
+
+USERNAME=lion
+PASSWORD=m5hhsxsorv0zb6fc
+DATABASE=powergDEV
+HOST=powerg-dev-database-do-user-9016877-0.b.db.ondigitalocean.com
+DB_PORT=25060
+TOKEN_SECRET = abc
+
+mysql> select * from Packages where delivery_man_name = 'shing' AND created_at between '2021/04/05' and '2021/04/15';
++------------+-----------------+-----------+---------------+------------+-----------+----------------+-------------+-----------------+---------------+---------+-------------------+--------+------------+--------------+
+| package_id | shop_owner      | cust_name | cust_location | cust_phone | pro_price | payment_method | service_fee | service_paid_by | package_price | status  | delivery_man_name | others | created_at | delivered_at |
++------------+-----------------+-----------+---------------+------------+-----------+----------------+-------------+-----------------+---------------+---------+-------------------+--------+------------+--------------+
+|          6 | StoreCollection | sopheak   | TK            | NULL       |        10 | COD            |           1 | Receiver        |            11 | PENDING | shing             | NULL   | 2021/04/13 | NULL         |
++------------+-----------------+-----------+---------------+------------+-----------+----------------+-------------+-----------------+---------------+---------+-------------------+--------+------------+--------------+

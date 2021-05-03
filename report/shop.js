@@ -2,20 +2,12 @@ const router = require('express').Router();
 const connection = require('../database/dbService');
 const { authRole } = require('../routes/validation');
 
-<<<<<<< HEAD:data/shop.js
-router.get('/generateReport', (req, res) => {
-    const start = req.header('start-date');
-    const shop = req.header('shop');
-
-    const query = "SELECT * FROM package WHERE created_at = ? AND shop_owner = ?;";
-=======
 
 router.get('/generateReport', authRole('admin'), (req, res) => {
     const start = req.query.date;
     const shop = req.query.shop;
 
     const query = "SELECT * FROM Packages WHERE created_at = ? AND shop_owner = ?;";
->>>>>>> 2144196053c28914e7a21f56d460100120eb2d63:report/shop.js
     connection.query(query, [start, shop], (err, packages) => {
         if (err) {
             return res.status(404).json({

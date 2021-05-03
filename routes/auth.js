@@ -38,19 +38,25 @@ router.post('/register', async(req, res) => {
                     message: 'Name already in use'
                 })
             } else {
-                const query = "INSERT INTO Users (user_name, user_password, contact, role, created_at) VALUES (?, ?, ?, ?, ?);";
-                connection.query(query, [name, hashedPassword, contact, user_role, dateAdded], (err, result) => {
-                    if (err) {
-                        console.log(err.message);
-                        res.status(404).json({
-                            message: 'Something went wrong in our End'
-                        })
-                    } else {
-                        res.status(200).json({
-                            message: "Successful Register"
-                        })
-                    }
-                })
+                if(result.length > 0) {
+                    res.status(400).json({
+                        message: 'Name already in use'
+                    })
+                } else {
+                    const query = "INSERT INTO Users (user_name, user_password, contact, role, created_at) VALUES (?, ?, ?, ?, ?);";
+                    connection.query(query, [name, hashedPassword, contact, user_role, dateAdded], (err, result) => {
+                        if (err) {
+                            console.log(err.message);
+                            res.status(404).json({
+                                message: 'Something went wrong in our End'
+                            })
+                        } else {
+                            res.status(200).json({
+                                message: "Successful Register"
+                            })
+                        }
+                    })
+                }
             }
         }
     });
@@ -95,7 +101,7 @@ router.post('/login', async(req, res) => {
 
 });
 
-router.get('/getuserbyid/:id', async(req, res) => {
+router.get('/getuserbyid/:id', authRole('admin'), async(req, res) => {
     const id = req.params.id;
     const query = ("SELECT * FROM Users WHERE user_id=?;");
     connection.query(query, [id], (err, user) => {
