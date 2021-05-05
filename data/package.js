@@ -270,11 +270,9 @@ router.delete('/deletePackageById/:id', authRole('admin'), (req, res) => {
     })
 });
 
-router.put('/updatePackageById', authRole('admin'), (req, res) => {
-    // const { created_at, cust_location, cust_name, cust_phone, delivered_at, delivery_man_name, others, package_id, package_price, payment_method, pro_price, service_fee, service_paid_by, shop_owner, status} = req.body;
-    // console.log(package);
-
+router.put('/updatePackageById', (req, res) => {
     const package = req.body;
+    console.log('---');
     console.log(package);
     res.status(200).json({
         message: 'ok'
