@@ -126,15 +126,6 @@ router.post('/finalUpdate', async(req, res) => {
     }    
 });
 
-router.put('/updatePackageById', (req, res) => {
-    const { created_at, cust_location, cust_name, cust_phone, delivered_at, delivery_man_name, others, package_id, package_price, payment_method, pro_price, service_fee, service_paid_by, shop_owner, status} = req.body;
-    // console.log(package);
-
-    res.status(200).json({
-        message: 'ok'
-    })
-});
-
 router.get('/getAllPackageByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
     console.log(date);
@@ -276,6 +267,17 @@ router.delete('/deletePackageById/:id', authRole('admin'), (req, res) => {
                 message: 'package deleted'
             })
         }
+    })
+});
+
+router.put('/updatePackageById', authRole('admin'), (req, res) => {
+    // const { created_at, cust_location, cust_name, cust_phone, delivered_at, delivery_man_name, others, package_id, package_price, payment_method, pro_price, service_fee, service_paid_by, shop_owner, status} = req.body;
+    // console.log(package);
+
+    const package = req.body;
+    console.log(package);
+    res.status(200).json({
+        message: 'ok'
     })
 });
 
