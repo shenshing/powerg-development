@@ -126,6 +126,15 @@ router.post('/finalUpdate', async(req, res) => {
     }    
 });
 
+router.put('/updatePackageById', (req, res) => {
+    const package = req.body;
+    console.log(package);
+
+    res.status(200).json({
+        message: 'ok'
+    })
+});
+
 router.get('/getAllPackageByDate', authRole('admin'), (req, res) => {
     const date = req.query.date;
     console.log(date);
@@ -270,13 +279,6 @@ router.delete('/deletePackageById/:id', authRole('admin'), (req, res) => {
     })
 });
 
-router.put('/updatePackageById', (req, res) => {
-    const package = req.body;
-    console.log(package);
 
-    res.status(200).json({
-        message: 'ok'
-    })
-});
 
 module.exports = router;
