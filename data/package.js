@@ -253,7 +253,6 @@ router.get('/countUnSuccessByDate', authRole('admin'), (req, res) => {
     })
 });
 
-
 router.delete('/deletePackageById/:id', authRole('admin'), (req, res) => {
     const id = parseInt(req.params.id);
     const query = "DELETE FROM Packages WHERE package_id = ?;";
@@ -268,6 +267,15 @@ router.delete('/deletePackageById/:id', authRole('admin'), (req, res) => {
                 message: 'package deleted'
             })
         }
+    })
+});
+
+router.put('/updatePackageById', authRole('admin'), (req, res) => {
+    const package = req.body;
+    console.log(package);
+
+    res.status(200).json({
+        message: 'ok'
     })
 });
 
