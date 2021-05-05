@@ -126,7 +126,7 @@ router.post('/finalUpdate', async(req, res) => {
     }    
 });
 
-router.put('/updatePackageById', (req, res) => {
+router.put('/updatePackageById/:id', (req, res) => {
     const package = req.body;
     console.log(package);
 
