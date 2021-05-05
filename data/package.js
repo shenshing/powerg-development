@@ -270,7 +270,7 @@ router.delete('/deletePackageById/:id', authRole('admin'), (req, res) => {
     })
 });
 
-router.put('/updatePackageById', (req, res) => {
+router.post('/updatePackageById', (req, res) => {
     const package = req.body;
     console.log(package);
 
