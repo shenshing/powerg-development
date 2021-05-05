@@ -3,7 +3,7 @@ const e = require('express');
 const connection = require('../database/dbService');
 const router = require('express').Router();
 const { authRole } = require('../routes/validation');
-const {responseforDeliveryList}  = require('../services/service');
+const {responseForDeliveryList}  = require('../services/service');
 
 
 router.post('/addList', async(req, res) => {
@@ -183,7 +183,7 @@ router.get('/getListById/:listId', async(req, res) => {
                 } else {
                     let response = [];
                     packages.forEach(package => {
-                        response.push(responseforDeliveryList(package));
+                        response.push(responseForDeliveryList(package));
                     })
                     return res.status(200).json({
                         data: response

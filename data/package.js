@@ -272,6 +272,14 @@ router.delete('/deletePackageById/:id', authRole('admin'), (req, res) => {
 
 router.put('/updatePackageById', (req, res) => {
     const package = req.body;
+    const package_id = package.package_id;
+    const payment_method = package.payment_method;
+    const service_paid_by = package.service_paid_by;
+    const status = package.status;
+    const others = package.others;
+
+    // const query = `UPDATE Packages SET payment_method = '${payment_method}', `
+
     console.log('---');
     console.log(package);
     res.status(200).json({
