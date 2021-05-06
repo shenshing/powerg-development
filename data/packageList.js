@@ -259,7 +259,7 @@ router.get('/getListByDateId', (req, res) => {
     })
 });
 
-router.get('/getListAndGenerateTotal/:id', /*authRole('admin'),*/ (req, res) => {
+router.get('/getListAndGenerateTotal/:id', authRole('admin'), (req, res) => {
     const id = req.params.id;
     // console.log(id);
 
