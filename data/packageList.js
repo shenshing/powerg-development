@@ -3,7 +3,7 @@ const e = require('express');
 const connection = require('../database/dbService');
 const router = require('express').Router();
 const { authRole } = require('../routes/validation');
-const {responseForDeliveryList}  = require('../services/service');
+const {responseForDeliveryList, getArrayOfPackage, totalAmountForList}  = require('../services/service');
 
 
 router.post('/addList', async(req, res) => {
@@ -257,7 +257,82 @@ router.get('/getListByDateId', (req, res) => {
             }
         }
     })
-})
+});
+
+router.get('/getListAndGenerateTotal/:id', /*authRole('admin'),*/ (req, res) => {
+    const id = req.params.id;
+    // console.log(id);
+
+    var totalAmountOfList = 0;
+
+    const query = `SELECT packages FROM PackageLists WHERE listId = ${id}`;
+    connection.query(query, (err, packages) => {
+        if(err) {
+            console.log('ERROR: ' + err.message);
+            res.status(404).json({
+                message: err.message
+            })
+        } else {
+            if(packages.length === 0) {
+                res.status(404).json({
+                    message: `no package exist in list ${id}`,
+                    data: [],
+                    totalAmount: totalAmountOfList
+                })
+            } else {
+                const package_id = packages[0].packages.split(',');
+                // const package_list = getArrayOfPackage(package_id);
+                // console.log(package_list);
+                const query = `SELECT * FROM Packages WHERE package_id in (${package_id})`;
+                connection.query(query, (err, packages) => {
+                    if(err) {
+                        console.log('ERROR: ' + err.message);
+                        res.status(404).json({
+                            message: err.message
+                        })
+                    } else {
+                        if(packages.length === 0) {
+                            res.status(404).json({
+                                message: 'packages not found'
+                            })
+                        } else {
+                            const total_amount_of_list = totalAmountForList(packages).total_amount;
+                            const query = `UPDATE PackageLists SET total = ${total_amount_of_list} WHERE listId = ${id};`;
+                            connection.query(query, (err, result) => {
+                                if(err) {
+                                    console.log('ERROR inside update PackageList Amount: ' + err.message);
+                                    res.status(404).json({
+                                        message: err.message
+                                    })
+                                } else {
+                                    if(result.affectedRows === 0) {
+                                        res.status(404).json({
+                                            message: `package ${id}'s total not update`
+                                        })
+                                    } else {
+                                        res.status(200).json({
+                                            message: 'ok',
+                                            ...totalAmountForList(packages)
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    }
+                })
+                // res.status(200).json({
+                //     message: 'ok',
+                //     data: packages,
+                //     totalAmount: totalAmountOfList
+                // })
+            }
+        }
+    })
+
+    // res.status(200).json({
+    //     message: 'ok'
+    // })
+});
 
 
 

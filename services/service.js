@@ -1,4 +1,4 @@
-
+const connection = require('../database/dbService');
     exports.calculateCOD = function(package) {
         if (package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
             return package.pro_price - package.service_fee;
@@ -54,4 +54,48 @@ exports.responseForDeliveryList = function(package) {
             package.pro_price = 0;
             return package;
         }
+}
+
+exports.totalAmountForList = function(packages) {
+    let total_amount = 0.00;
+    let total_success = 0;
+    let total_unsuccess = 0;
+    let total_ongoing = 0;
+    let delivery_paid;
+    packages.forEach(package => {
+        if (package.status === 'SUCCESS') {
+            total_success = total_success + 1;
+            total_amount = total_amount + package.package_price;
+        } else if(package.status === 'ON GOING') {
+            total_ongoing = total_ongoing + 1;
+        } else {
+            total_unsuccess = total_unsuccess + 1;
+        }
+    })
+
+    return {
+        total_package: packages.length,
+        success: total_success,
+        unsuccess: total_unsuccess,
+        ongoing: total_ongoing,
+        total_amount
+    }
+}
+
+exports.getArrayOfPackage = function(array_of_package_id) {
+    // return 'total length: ' + array_of_package_id.length;
+    let packages = [];
+    const query = `SELECT * FROM Packages WHERE package_id in (${array_of_package_id})`;
+    connection.query(query, (err, result) => {
+        if(err) {
+            return [];
+        } else {
+            if(result.length === 0) {
+                return [];
+            } else {
+                // console.log(result);
+                return result;
+            }
+        }
+    })
 }

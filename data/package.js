@@ -278,12 +278,27 @@ router.put('/updatePackageById', (req, res) => {
     const status = package.status;
     const others = package.others;
 
-    // const query = `UPDATE Packages SET payment_method = '${payment_method}', `
+    const new_package_price = calculateCOD(package);
+    console.log(new_package_price);
 
-    console.log('---');
-    console.log(package);
-    res.status(200).json({
-        message: 'ok'
+    const query = `UPDATE Packages SET payment_method = '${payment_method}', service_paid_by = '${service_paid_by}', package_price = ${new_package_price}, status = '${status}', others = '${others}' WHERE package_id = ${package_id}`;
+    connection.query(query, (err, result) => {
+        if(err) {
+            console.log('ERROR: ' + err.message);
+            res.status(400).json({
+                message: err.message
+            })
+        } else {
+            if(result.affectedRows === 0 ) {
+                res.status(200).json({
+                    message: 'no package found'
+                })
+            } else {
+                res.status(200).json({
+                    message: 'package update success'
+                })
+            }
+        }
     })
 });
 
