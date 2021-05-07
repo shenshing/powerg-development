@@ -61,11 +61,27 @@ exports.totalAmountForList = function(packages) {
     let total_success = 0;
     let total_unsuccess = 0;
     let total_ongoing = 0;
-    let delivery_paid;
+    let delivery_man_pay;
     packages.forEach(package => {
         if (package.status === 'SUCCESS') {
             total_success = total_success + 1;
-            total_amount = total_amount + package.package_price;
+            // total_amount = total_amount + package.package_price;
+            if (package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
+                delivery_man_pay = package.pro_price;
+                total_amount = total_amount + delivery_man_pay;
+            }
+            if (package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
+                delivery_man_pay = package.pro_price + package.service_fee;
+                total_amount = total_amount + delivery_man_pay;
+            }
+            if (package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
+                delivery_man_pay = 0;
+                total_amount = total_amount + delivery_man_pay;
+            }
+            if (package.payment_method === 'Paid' && package.service_paid_by === 'Receiver') {
+                delivery_man_pay = package.service_fee;
+                total_amount = total_amount + delivery_man_pay;
+            }
         } else if(package.status === 'ON GOING') {
             total_ongoing = total_ongoing + 1;
         } else {
