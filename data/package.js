@@ -275,13 +275,15 @@ router.put('/updatePackageById', (req, res) => {
     const package_id = package.package_id;
     const payment_method = package.payment_method;
     const service_paid_by = package.service_paid_by;
+    const pro_price = package.pro_price;
     const status = package.status;
     const others = package.others;
+    console.log(package);
 
     const new_package_price = calculateCOD(package);
-    console.log(new_package_price);
+    // console.log(new_package_price);
 
-    const query = `UPDATE Packages SET payment_method = '${payment_method}', service_paid_by = '${service_paid_by}', package_price = ${new_package_price}, status = '${status}', others = '${others}' WHERE package_id = ${package_id}`;
+    const query = `UPDATE Packages SET payment_method = '${payment_method}', service_paid_by = '${service_paid_by}', package_price = ${new_package_price}, pro_price = ${pro_price}, status = '${status}', others = '${others}' WHERE package_id = ${package_id}`;
     connection.query(query, (err, result) => {
         if(err) {
             console.log('ERROR: ' + err.message);
