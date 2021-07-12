@@ -161,7 +161,7 @@ router.post('/checkNull', async(req, res, cb) => {
 
 
 
-router.get('/delivery/getListById/:listId', async(req, res) => {
+router.get('/getListById/:listId', async(req, res) => {
     const id = parseInt(req.params.listId);
     const delivery_man_id = parseInt(req.params.user);
     const query = "SELECT * FROM PackageLists WHERE listId = ?;";
