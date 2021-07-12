@@ -61,19 +61,22 @@ exports.responseForDeliveryList = function(package) {
 }
 
 exports.responseForAdminList = function(package) {
-    if(package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
-        package.service_fee = 0;
-        return package;
-    } else if(package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
-        return package;
-    } else if(package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
-        package.service_fee = 0;
-        package.pro_price;
-        return package;
-    } else { //(package.payment_method === 'Paid', && package.service_paid_by === 'Receiver')
-        package.pro_price;
-        return package;
-    }
+    // if(package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
+    //     package.service_fee = 0;
+    //     return package;
+    // } else if(package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
+    //     return package;
+    // } else if(package.payment_method === 'Paid' && package.service_paid_by === 'Transferer') {
+    //     package.service_fee = 0;
+    //     package.pro_price;
+    //     return package;
+    // } else { //(package.payment_method === 'Paid', && package.service_paid_by === 'Receiver')
+    //     package.pro_price;
+    //     return package;
+    // }
+    package.pro_price;
+    package.service_fee;
+    return package;
 }
 
 exports.totalAmountForList = function(packages) {
