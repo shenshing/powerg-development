@@ -57,7 +57,8 @@ exports.responseForDeliveryList = function(package) {
         } else { //(package.payment_method === 'Paid', && package.service_paid_by === 'Receiver')
             // package.pro_price = 0;
             // return package;
-            return package.pro_price;
+            package.pro_price;
+            return package;
         }
 }
 
