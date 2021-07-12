@@ -3,7 +3,7 @@ const e = require('express');
 const connection = require('../database/dbService');
 const router = require('express').Router();
 const { authRole } = require('../routes/validation');
-const {responseForDeliveryList, getArrayOfPackage, totalAmountForList}  = require('../services/service');
+const {responseForDeliveryList, getArrayOfPackage, totalAmountForList, responseForAdminList}  = require('../services/service');
 
 
 router.post('/addList', async(req, res) => {
