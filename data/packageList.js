@@ -161,7 +161,7 @@ router.post('/checkNull', async(req, res, cb) => {
 
 
 
-router.get('/getListById/:listId', async(req, res) => {
+router.get('/delivery/getListById/:listId', async(req, res) => {
     const id = parseInt(req.params.listId);
     const delivery_man_id = parseInt(req.params.user);
     const query = "SELECT * FROM PackageLists WHERE listId = ?;";
@@ -191,8 +191,40 @@ router.get('/getListById/:listId', async(req, res) => {
                 }
             })
         }
-    })
-    
+    })  
+});
+
+router.get('/admin/getListById/:listId', async(req, res) => {
+    const id = parseInt(req.params.listId);
+    const delivery_man_id = parseInt(req.params.user);
+    const query = "SELECT * FROM PackageLists WHERE listId = ?;";
+    connection.query(query, [id, delivery_man_id], (err, result) => {
+        if(err) {
+            console.log(err);
+            return res.status(404).json({
+                message: err.message
+            })
+        } else {
+            const idData = result[0].packages.split(',');
+            const query = "SELECT * FROM Packages WHERE package_id in (?)";
+            connection.query(query, [idData], (err, packages) => {
+                if(err) {
+                    console.log("ERROR: " + err.message);
+                    res.status(404).json({
+                        message: err.message,
+                    });
+                } else {
+                    let response = [];
+                    packages.forEach(package => {
+                        response.push(responseForAdminList(package));
+                    })
+                    return res.status(200).json({
+                        data: response
+                    })
+                }
+            })
+        }
+    })  
 });
 
 router.get('/getAllLists', authRole('admin'), (req, res) => {
