@@ -285,9 +285,12 @@ router.delete('/deleteShop/:shopId', authRole('admin'), (req, res) => {
 });
 
 router.get('/packageOfShopByDate', authRole('admin'), (req, res) => {
+
     const date = req.query.date;
     const shop = req.query.shop;
 
+    // console.log(date);
+    // console.log(shop);
     const query = "SELECT * FROM Packages WHERE shop_owner = ? AND created_at = ?;";
     connection.query(query, [shop, date], (err, result) => {
         if(err) {
@@ -301,9 +304,16 @@ router.get('/packageOfShopByDate', authRole('admin'), (req, res) => {
                     message: 'no information exist'
                 })
             } else {
+                let response = [];
+                result.forEach(package => {
+                    if(package.status === 'UNSUCCESS') {
+                        package.package_price = 0;
+                    }
+                    response.push(package)
+                });
                 res.status(200).json({
                     message: 'ok',
-                    data: result
+                    data: response
                 })
             }
         }
