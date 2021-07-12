@@ -22,12 +22,12 @@ router.post('/addPackage', authRole('admin'), async (req, res) => {
         pro_price: pro_price,
         service_fee: service_fee
     };
-    // let package_price = calculateCOD(pack);
+    let package_price = calculateCOD(pack);
     // console.log(package_price);
     console.log(pack);
     try {
         const query = "INSERT INTO Packages(shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, package_price, status, created_at) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        connection.query(query, [shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, pro_price, status, dateAdded], async (err, result) => {
+        connection.query(query, [shop_owner, cust_name, cust_location, cust_phone, pro_price, payment_method, service_fee, service_paid_by, package_price, status, dateAdded], async (err, result) => {
             if (err) {
                 console.log(err.message);
                 res.status(404).json({
