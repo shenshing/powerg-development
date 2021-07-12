@@ -55,8 +55,9 @@ exports.responseForDeliveryList = function(package) {
             package.pro_price;
             return package;
         } else { //(package.payment_method === 'Paid', && package.service_paid_by === 'Receiver')
-            package.pro_price = 0;
-            return package;
+            // package.pro_price = 0;
+            // return package;
+            return package.pro_price;
         }
 }
 
