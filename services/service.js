@@ -1,6 +1,7 @@
 const connection = require('../database/dbService');
     exports.calculateCOD = function(package) {
         if (package.payment_method === 'COD' && package.service_paid_by === 'Transferer') {
+            // old
             return package.pro_price - package.service_fee;
         }
         if (package.payment_method === 'COD' && package.service_paid_by === 'Receiver') {
@@ -10,7 +11,10 @@ const connection = require('../database/dbService');
             return -package.service_fee;
         }
         if (package.payment_method === 'Paid' && package.service_paid_by === 'Receiver') {
-            return 0;
+            //old
+            // return 0;
+            //new 
+            return package.pro_price;
         }
         return 0;
     },
