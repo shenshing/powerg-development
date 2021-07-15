@@ -73,6 +73,7 @@ router.get('/totalEachShop', (req, res) => {
         return res.status(200).json({
             message: 'ok',
             data: {
+                all: result,
                 plusShop: {
                     data: totalPlusShop,
                     total: totalAmountForPlusShop
