@@ -52,7 +52,7 @@ router.get('/totalEachShop', (req, res) => {
         }
         let totalMinusShop = [];
         let totalPlusShop = [];
-        result?.forEach(shop => {
+        result.forEach(shop => {
             if(shop.total < 0) {
                 totalMinusShop.push(shop);
             } else {
@@ -61,12 +61,12 @@ router.get('/totalEachShop', (req, res) => {
         })
 
         let totalAmountForPlusShop = 0;
-        totalPlusShop?.forEach(shop => {
+        totalPlusShop.forEach(shop => {
             totalAmountForPlusShop = totalAmountForPlusShop + shop.total;
         })
 
         let totalAmountForMinusShop = 0;
-        totalMinusShop?.forEach(shop => {
+        totalMinusShop.forEach(shop => {
             totalAmountForMinusShop = totalAmountForMinusShop + shop.total;
         })
 
