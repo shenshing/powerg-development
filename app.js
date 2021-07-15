@@ -12,6 +12,7 @@ const server = require('./routes/server');
 const shopReport = require('./data/shop');
 const packageList = require('./data/packageList');
 const delivery = require('./report/delivery_man');
+const total = require('./data/total');
 
 // const {isAdmin} = require('./routes/validation');
 
@@ -43,8 +44,9 @@ app.use('/package', Package);
 app.use('/shop', shopReport);
 app.use('/packageList', packageList);
 app.use('/delivery', delivery);
+app.use('/total', total);
 
 
-app.listen(3001, () => {
+app.listen(3000, () => {
     console.log('Server up and Running');
 });
