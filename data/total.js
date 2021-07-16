@@ -24,7 +24,8 @@ router.get('/totalServiceFee'/*, authRole('admin')*/, (req, res) => {
             })
         } else if (packages.length <= 0) {
             return res.status(404).json({
-                message: 'no data exist',
+                message: 'ok',
+                totalServiceFee: 0
             })
         }
         return res.status(200).json({
@@ -46,9 +47,25 @@ router.get('/totalEachShop', (req, res) => {
                 message: err.message
             })
         } else if (result.length <= 0) {
-            return res.status(404).json({
-                message: 'no data exist',
+            // return res.status(404).json({
+            //     message: 'no data exist',
+            // })
+            return res.status(200).json({
+                message: 'ok',
+                data: {
+                    all: [],
+                    plusShop: {
+                        data: [],
+                        total: 0
+                    },
+                    minusShop: {
+                        data:  [],
+                        total: 0
+                    }
+                }
+                // totalFeeAmount: 0
             })
+            
         }
         let totalMinusShop = [];
         let totalPlusShop = [];
