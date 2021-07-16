@@ -23,7 +23,7 @@ router.get('/totalServiceFee'/*, authRole('admin')*/, (req, res) => {
                 message: err.message
             })
         } else if (packages.length <= 0) {
-            return res.status(404).json({
+            return res.status(200).json({
                 message: 'ok',
                 totalServiceFee: 0
             })
