@@ -38,7 +38,8 @@ router.get('/totalServiceFee', authRole('admin'), (req, res) => {
 router.get('/totalEachShop', authRole('admin'), (req, res) => {
     const date = req.query.date;
 
-    const query = `SELECT  shop_owner, SUM(package_price) as total  FROM Packages  WHERE created_at = '${date}' AND status = 'SUCCESS' AND payment_method = 'COD' GROUP BY shop_owner;`;
+    const query = `SELECT  shop_owner, SUM(package_price) as total  FROM Packages  WHERE created_at = '${date}' AND status = 'SUCCESS'  GROUP BY shop_owner;`; 
+    // AND payment_method = 'COD'
     console.log(query);
 
     connection.query(query, (err, result) => {
